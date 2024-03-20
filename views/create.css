@@ -1,0 +1,107 @@
+:root{
+	--dark: #222831;
+	--grey: #31363F;
+	--blue: #76ABAE;
+	--white: #EEEEEE;
+}
+
+#container{
+	background-color: var(--white);
+	width: 1200px;
+	height: 800px;
+	display: flex;
+	margin: auto;
+	margin-top: 100px;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+fieldset{
+	border-color: #000;
+	height: 780px;
+	overflow-x: hidden; 
+}
+
+legend{
+	font-size: 1.2em;
+	font-weight: 500;
+}
+
+/*STACK SIDE*/
+
+#fs-stack{
+	display: grid;
+	grid-template-rows: 700px 1fr;
+}
+
+#form-stack{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+#container-stack{
+	width: 50%;
+}
+
+#container-workspace{
+	width: 50%;
+}
+
+.item-stack{
+	background-color: #fff;
+	padding: 0px 20px;
+	border: 1px solid #ddd;
+}
+
+.item-stack-info{
+	display: flex;
+}
+
+.item-stack-left{
+	flex-basis: 50%;
+}
+
+.item-stack-right{
+	flex-basis: 50%;
+}
+
+.item-stack-day{
+	font-weight: 900;
+}
+
+.item-stack-remove{
+	margin-bottom: 20px;
+}
+
+/*WORKSPACE SIDE*/
+#fs-workspace input, #fs-workspace button{
+	padding: 5px 10px;
+}
+
+#fs-workspace label{
+	margin: 10px 0px;
+}
+
+#fs-workspace div{
+	margin: 20px 0px;
+}
+
+#fm-workspace{
+	display: flex;
+	flex-direction: column;
+}
+
+#fs-workspace div{
+	display: flex;
+	justify-content: space-between;
+}
+
+
+#fs-workspace div input{
+	margin-left: 10px;
+	padding: 0px 10px;
+}
+
+

@@ -1,0 +1,38 @@
+:root{
+	--dark: #222831;
+	--grey: #31363F;
+	--blue: #76ABAE;
+	--white: #EEEEEE;
+}
+
+.{
+	margin: 0px;
+}
+
+html{
+	height: 100%;
+	width: 100%;
+	background-color: var(--dark);
+}
+
+h1{
+	margin-top: 50px;
+}
+
+.welcome-msg{
+	color: var(--white);
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+}
+
+#form-container{
+	background-color: var(--white);
+	max-width: 1000px;
+	min-width: 1000px;
+	max-height: 800px;
+	min-height: 800px;
+	border-radius: 10px;
+	padding: 0px;
+	margin: auto;
+}

@@ -1,16 +1,17 @@
 <!--DOCTYPE html-->
+{% load static %}
 <html lang="en">
 	<head>
-		<title>Schedule Maker</title>
-		<link rel="stylesheet" href="general.css" />
-		<link rel="stylesheet" href="welcome.css" />
+	<title>Schedule Maker</title>
+	<link rel="stylesheet" href="{% static 'css/general.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/welcome.css' %}" />
 	</head>
 	<body>
 		<h1 class="welcome-msg">Welcome to Schedule maker</h1>
 		<p 	class="welcome-msg">Set priorities, hours and <b>get the most value of your time!</b></p>
 		<div id="form-container">
 			<div id="form-image">
-				<img src="welcome_wp.jpg" alt="logo" />
+				<img src="{% static 'img/welcome_wp.jpg' %}" alt="logo" />
 			</div>
 			<div id="form-form">
 				<form action="#" method="POST">

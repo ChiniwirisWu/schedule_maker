@@ -1,0 +1,65 @@
+body{
+	background-color: #000;
+	background-image: url('images/wp2.jpg');
+	background-size: cover;
+}
+
+#container{
+	display: flex;
+	height: 100%;
+	overflow: hidden;
+}
+
+#container-welcome{
+	flex-basis: 30%;
+	background-color: #001941;
+	color: #fff;
+	height: 100%;
+	font-size: 20em;
+	padding:200px;
+	opacity: .899;
+}
+
+#container-login{
+	display: flex;
+	flex-grow: 1;
+	justify-content: center;
+	padding-top: 200px;
+	height: 80%;
+}
+
+form{
+	display: flex;
+	flex-direction: column;
+	font-size: 5em;
+	background-color: #fff;
+	max-width: 40%;
+	min-width: 40%;
+	height: 100%;
+	padding: 50px 200px;
+	border-radius: 50px;
+	opacity: .8;
+}
+
+input{
+	opacity: 1;
+	font-size: 1em;
+	margin: 50px 0px;
+	padding: 20px 20px;
+}
+
+button{
+	font-size: 1em;
+	padding: 20px;
+	border-radius: 50px;
+	color: #fff;
+	background-color: #001941;
+}
+
+p{
+	font-size: .8em;
+}
+
+a{
+	
+}

@@ -1,3 +1,7 @@
+:root{
+	--dark-blue: #001941;
+}
+
 body{
 	background-color: #000;
 	background-image: url('images/wp2.jpg');

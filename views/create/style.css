@@ -1,0 +1,96 @@
+:root{
+	--dark-blue: #001941;
+}
+
+::-webkit-scrollbar{
+	width: 5px;
+}
+
+::-webkit-scrollbar-track{
+	background: #eee;
+}
+
+::-webkit-scrollbar-thumb{
+	background: #ddd;
+}
+
+::-webkit-scrollbar-thumb:hover{
+	background: #ccc;
+}
+
+body{
+	background-color: #000;
+	background-image: url('images/wp.jpg');
+	background-size: cover;
+}
+
+
+
+#container{
+	display: grid;
+	width: 90%;
+	height: 90%;
+	background-color: #fff;
+	margin: auto;
+	margin-top: 50px;
+	opacity: 0.9;
+	grid-template-columns: repeat(7,14.28%);
+	grid-template-rows: 200px 1fr 100px;
+	row-gap: 50px;
+	padding: 20px;
+	/*column-gap: 10px;*/
+}
+
+#container-form{
+	grid-column-start: 1;
+	grid-column-end: 8;
+}
+
+/*Form*/
+form h3{
+	text-align: center;
+}
+
+
+/*Days*/
+.container-day{
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding: 0px 10px;
+}
+
+.container-day button{
+	background: rgba(200,200,200,.3);
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	cursor: pointer;
+}
+
+.day-activity{
+	width: 93%;
+	display: flex;
+	border: 1px solid #eee;
+	padding: 0px 10px;
+	margin-bottom: 5px;
+}
+
+.activity-details{
+	flex-basis: 50%;
+}
+
+.activity-time{
+	flex-basis: 50%;
+}
+
+.details-category span{
+	padding: 2px 5px;
+	height: 2px;
+	background-color: #439;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+
+

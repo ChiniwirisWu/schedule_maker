@@ -2,6 +2,14 @@
 	--dark-blue: #001941;
 }
 
+*{
+	font-size: 20px;
+}
+
+label{
+	margin-right: 10px;
+}
+
 ::-webkit-scrollbar{
 	width: 5px;
 }
@@ -22,6 +30,11 @@ body{
 	background-color: #000;
 	background-image: url('images/wp.jpg');
 	background-size: cover;
+}
+
+button, option, select{
+	background-color: var(--dark-blue);
+	color: #fff;
 }
 
 
@@ -75,6 +88,18 @@ form h3{
 	border: 1px solid #eee;
 	padding: 0px 10px;
 	margin-bottom: 5px;
+	align-items: center;
+}
+
+
+.day-activity button{
+	background-color: #ccc;
+	padding: 10px;	
+}
+
+.day-activity button:hover{
+	background-color: var(--dark-blue);	
+	color: #fff;
 }
 
 .activity-details{
@@ -93,4 +118,17 @@ form h3{
 	margin-right: 5px;
 }
 
+
+/* CONTAINER SUBMIT */
+#container-submit{
+	grid-column-start:1;
+	grid-column-end: 8;
+	display: flex;
+	justify-content: center;
+}
+
+#container-submit button{
+	display: inline;
+	height: 50px;
+}
 

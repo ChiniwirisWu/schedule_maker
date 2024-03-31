@@ -4,18 +4,19 @@
 		<title>Create</title>
 		<link rel='icon' href='images/create.ico' />
 		<link rel='stylesheet' href='style.css' />
+		<script src="https://kit.fontawesome.com/51e1fe77b6.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
 		<div id='container'>
 			<div id='container-form'>
 				<form action='#' method='post'>
 					<h3>Create each activities for your week! (˶ᵔ ᵕ ᵔ˶)</h3>
-					<label>Type of activity</label>
+					<label>Type of activity:</label>
 					<select>
 						<option name='type' value='fixed' title='set a fixed time'>Fixed</option>
 						<option name='type' value='auto' title='the program will set the time'>Auto fill</option>
 					</select>	
-					<label>Category</label>
+					<label>Category:</label>
 					<select>
 						<option name='category' value='sports'>Sports</option>
 						<option name='category' value='university'>University</option>
@@ -27,7 +28,7 @@
 						<option name='category' value='home'>Home</option>
 						<option name='category' value='workout'>Workout</option>
 					</select>
-					<label>Day</label>
+					<label>Day:</label>
 					<select>
 						<option name='day' value='monday'>Monday</option>
 						<option name='day' value='tuesday'>Tuesday</option>
@@ -37,13 +38,13 @@
 						<option name='day' value='saturday'>Saturday</option>
 						<option name='day' value='sunday'>Sunday</option>
 					</select>
-					<label>Name</label>
-					<input type='text' name='name' />
-					<label>From</label>
-					<input type='number' name='from' />
-					<label>To</label>
-					<input type='number' name='to' />
-					<button>Add</button>
+					<label>Name:</label>
+					<input type='text' name='name' placeholder='rubiusomg'/>
+					<label>From:</label>
+					<input type='number' name='from' placeholder='1000 (10:00)' />
+					<label>To:</label>
+					<input type='number' name='to' placeholder='1230 (12:30)'/>
+					<button><i class="fa-solid fa-plus"></i></button>
 				</form>
 			</div>
 			<div class='container-day'>
@@ -57,7 +58,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div class='container-day'>
@@ -71,7 +72,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div class='container-day'>
@@ -85,7 +86,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div class='container-day'>
@@ -99,7 +100,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div class='container-day'>
@@ -113,7 +114,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div class='container-day'>
@@ -127,7 +128,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div class='container-day'>
@@ -141,117 +142,7 @@
 						<p>10:00</p>
 						<p>12:00</p>
 					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
-				</div>
-				<div class='day-activity'>
-					<div class='activity-details'>
-						<p class='details-name'>Swimming</p>
-						<p class='details-category'><span></span>Sports</p>
-					</div>
-					<div class='activity-time'>
-						<p>10:00</p>
-						<p>12:00</p>
-					</div>
-					<button>Remove</button>
+					<button><i class="fa-solid fa-trash"></i></button>
 				</div>
 			</div>
 			<div id='container-submit'>

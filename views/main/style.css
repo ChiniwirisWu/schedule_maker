@@ -1,0 +1,113 @@
+:root{
+	--dark-blue: #001941;
+}
+
+::-webkit-scrollbar{
+	width: 5px;
+}
+
+::-webkit-scrollbar-track{
+	background: #eee;
+}
+
+::-webkit-scrollbar-thumb{
+	background: #ddd;
+}
+
+::-webkit-scrollbar-thumb:hover{
+	background: #ccc;
+}
+
+*{
+	font-size: 20px;
+}
+
+body{
+	background-color: #000;
+	background-image: url('images/wp2.jpg');
+	background-size: cover;
+}
+
+span{
+	padding: 3px;
+	background-color: var(--dark-blue);
+}
+
+
+#container{
+	display: grid;
+	width: 99%;
+	height: 80%;
+	margin-top: 50px; 
+	grid-template-columns: 15% 1fr 20%;
+	column-gap: 5px; 
+	padding: 10px;
+}
+
+/* CONTAINER ASSISTANCE */
+
+#container-assistance{
+	overflow-y: scroll;
+	padding: 10px;
+	background-color: rgba(255,255,255,.8);
+}
+
+#next-activity{
+	border: 1px solid #bbb;
+	border-radius: 5px;
+	padding: 0px 5px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #fff;
+}
+
+#next-activity-buttons button{
+	font-size: 1.5em;
+	width: 35px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	padding: 5px;
+	cursor: pointer;
+}
+
+#next-activity-buttons button:hover{
+	background-color: var(--dark-blue);
+	color: #fff;
+}
+
+/* CONTAINER TABLE */
+
+#container-table{
+	background-color: var(--dark-blue);
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+th{
+	color: #eee;
+}
+
+
+/* CONTAINER OPTIONS */
+#container-options{
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(0,0,0,.8);
+	color: #eee;
+}
+
+#container-options button{
+	padding: 5px;
+	margin-bottom: 5px;
+	cursor: pointer;
+	background-color: inherit;
+	color: #eee;
+}
+
+
+#container-options button:hover{
+	color: #000;
+	background-color: #eee;
+}

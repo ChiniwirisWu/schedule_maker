@@ -1,0 +1,11 @@
+(done bitch) 1. User autentication. 
+	1.1 Register new user.
+	1.2 Log in new user
+
+2. Create a new schedule for each user.
+	2.1 Insert the dynamic form using JS. 
+	2.2 The hours can't collapse with each other.
+
+3. Show all the activities for each day.
+
+

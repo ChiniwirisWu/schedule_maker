@@ -1,9 +1,10 @@
 <!--DOCTYPE html5-->
+{% load 'static' %}
 <html lang='en'>
 	<head>
 		<title>Create</title>
-		<link rel='icon' href='images/create.ico' />
-		<link rel='stylesheet' href='style.css' />
+		<link rel='icon' href='{% static "create/img/create.ico" %}' />
+		<link rel='stylesheet' href='{% static "create/style.css" %}' />
 		<script src="https://kit.fontawesome.com/51e1fe77b6.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
@@ -41,9 +42,9 @@
 					<label>Name:</label>
 					<input type='text' name='name' placeholder='rubiusomg'/>
 					<label>From:</label>
-					<input type='number' name='from' placeholder='1000 (10:00)' />
+					<input type='time' name='from' />
 					<label>To:</label>
-					<input type='number' name='to' placeholder='1230 (12:30)'/>
+					<input type='time' name='to' />
 					<button><i class="fa-solid fa-plus"></i></button>
 				</form>
 			</div>
@@ -149,5 +150,6 @@
 				<button>Create new Schedule</button>
 			</div>
 		</div>
+		<script src="{% static 'create/main.js' %}"></script>
 	</body>
 </html>

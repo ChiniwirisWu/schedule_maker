@@ -1,0 +1,26 @@
+<!DOCTYPE html5-->
+{% load static %}
+<html lang='en'>
+	<head>
+		<title>Register</title>
+		<link rel="icon" href="{% static 'login/images/login.ico'  %}" />
+		<link rel="stylesheet" href="{% static 'login/style.css'  %}" />
+	</head>
+	<body>
+		<div id="container">
+			<div id="container-welcome">Let's<br>Join<br>New User! </div>
+			<div id="container-login">
+				<form action="{% url 'schedule:create_user' %}" method="POST">
+					{% csrf_token %}
+					<h3>Insert user data</h3>	
+					<label>Username:</label>
+					<input type="text" id="username" name="username" placeholder="..." />
+					<label>password:</label>
+					<input type="text" id="password" name="password" placeholder="..." />
+					<button>Register</button>
+					<p>Do you have an account? click <a href="login">here</a> to login.</p>
+				</form>
+			</div>
+		</div>	
+	</body>
+</html>

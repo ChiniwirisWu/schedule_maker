@@ -2,11 +2,8 @@ const form_activity = document.querySelector('.form-activities')
 
 function add_activity(form){
 	const form_data = new FormData(form)
-	const data = Object.fromEntries(form_data.entries())
-	console.log(data)
+	const data = Object.fromEntries(form_data)
 	const container = document.getElementById(`container-${data['day']}`)
-	const h3 = data['day']
-	container.innerHTML = h3
 }
 
 /* Determina cuál formulario se muestra entre "FIXED" y "AUTO" */
@@ -68,17 +65,12 @@ async function load_auto_form_template(){
 	input_name.setAttribute('name', 'name')
 	ital.classList.add('fa-solid','fa-plus')
 	button.setAttribute('id', 'btn-submit')
-	button.setAttribute('form', 'form-activities')
 	label_hours.textContent = 'Hours: '
 	label_importance.textContent = 'Importance: '
 	input_hours.setAttribute('type', 'number')
 	input_importance.setAttribute('type', 'number')
 	input_hours.setAttribute('name', 'hours')
 	input_importance.setAttribute('name', 'importance')
-
-	select_type.addEventListener('change', (e)=>{
-		change_form_template(e.target.value)
-	})
 
 	button.appendChild(ital)
 	df.appendChild(h3_welcome)	
@@ -127,7 +119,6 @@ async function load_fixed_form_template(){
 	input_name.setAttribute('name', 'name')
 	ital.classList.add('fa-solid','fa-plus')
 	button.setAttribute('id', 'btn-submit')
-	button.setAttribute('form', 'form-activities')
 	label_from.textContent = 'From: '
 	label_to.textContent = 'To: '
 	input_from.setAttribute('type', 'time')
@@ -135,7 +126,6 @@ async function load_fixed_form_template(){
 	input_from.setAttribute('name', 'from')
 	input_to.setAttribute('name', 'to')
 	button.appendChild(ital)
-
 
 	df.appendChild(h3_welcome)	
 	df.appendChild(select_type)
@@ -158,6 +148,7 @@ function create_select_elements_list_type(list, label_text, name, id){
 	let df = document.createDocumentFragment()
 	let label = document.createElement('label')
 	let select = document.createElement('select')
+	select.setAttribute('name', name)
 	label.textContent = label_text
 	select.setAttribute('id', id)
 
@@ -183,6 +174,7 @@ function create_select_elements_list(list, label_text, name, id){
 	let df = document.createDocumentFragment()
 	let label = document.createElement('label')
 	let select = document.createElement('select')
+	select.setAttribute('name', name)
 	label.textContent = label_text
 	select.setAttribute('id', id)
 
@@ -193,10 +185,6 @@ function create_select_elements_list(list, label_text, name, id){
 		option.textContent = list[i]
 		select.appendChild(option)
 	}
-
-	select.addEventListener('change', (e)=>{
-		change_form_template(e.target.value)
-	})
 
 	df.appendChild(label)
 	df.appendChild(select)

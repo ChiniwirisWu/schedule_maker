@@ -132,3 +132,7 @@ form h3{
 	height: 50px;
 }
 
+
+.form-time{
+	display: inline-block;
+}

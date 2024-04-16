@@ -1,9 +1,119 @@
 const form_activity = document.querySelector('.form-activities')
+let min_hour = 7
+let max_hour = 22
+let avaliable_hours = max_hour - min_hour
+let matrix_space =  avaliable_hours - 1
+const activities = {
+	'monday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'tuesday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'wednesday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'thrusday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'friday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'saturday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'sunday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+}
 
 function add_activity(form){
 	const form_data = new FormData(form)
 	const data = Object.fromEntries(form_data)
-	const container = document.getElementById(`container-${data['day']}`)
+	if (data['from'] == undefined){
+		// I am in a automatic form
+
+	} else{
+		// I am at fixed form
+		const hours = diference_of_time(data['from'], data['to']) 
+		if (activities[data['day']][1] - hours >= 0 && is_hours_avaliable(activities[data['day']][2], data['from'], data['to'])){
+			mark_hours(activities[data['day']][2], data['from'], data['to'])	
+			activities[data['day']][0].push(data)
+			activities[data['day']][1] -= hours
+			console.log(activities)
+			activities[data['day']][0].sort(sort_activity)
+			show_activities()
+		}
+	}
+}
+
+function sort_activity(a, b){
+	console.log(a,b)
+	return parseInt(a.from.substring(0,2)) - parseInt(b.from.substring(0,2))
+}
+
+
+function is_hours_avaliable(register, from, to){
+	from = parseInt(from.substring(0,2))
+	to = round_hour(to)
+	for(let i = from; i < to + 1; i++){
+		if(register[i - 7] == 1){
+			return false
+		}
+	}
+	return true
+}
+
+function mark_hours(register, from, to){
+	from = parseInt(from.substring(0,2))
+	to = round_hour(to)
+	for(let i = from; i < to; i++){
+		register[i - 7] = 1	
+	}
+}
+
+//crea cada una de las actividades definidas en el formulario y lo agrupa en un contenedor por dia
+function show_activities(){
+	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
+
+	for (let d = 0; d < days.length; d++){
+		let container = document.getElementById(`container-${days[d]}`)
+		console.log(container)
+		
+		for(let i = 0; i < activities[days[d]][0].length;i++){
+			let container_activity = document.createElement('div')
+			let container_details = document.createElement('div')
+			let container_time = document.createElement('div')
+			let p_details_name = document.createElement('p')
+			let p_details_category = document.createElement('p')
+			let p_time_from = document.createElement('p')
+			let p_time_to = document.createElement('p')
+			let button = document.createElement('button')
+			let i = document.createElement('i')
+			let data = activities[days[d]][0][i]
+
+			container_activity.classList.add('day-activity')
+			container_details.classList.add('activity-details')
+			container_time.classList.add('activity-time')
+			p_details_name.classList.add('details-name')
+			p_details_category.classList.add('details-category')
+			i.classList.add('fa-solid', 'fa-trash')
+			//TODO: OBJETIVO: CONSEGUIR INSERTAR CADA ACTIVIDAD DENTRO DE SU GRUPO.
+			p_details_name.textContent = data['name']
+			p_time_from.textContent = data['from']
+			p_time_to.textContent = data['to']
+			p_details_category.innerHTML = `<span></span>${data['category']}` 
+
+			button.appendChild(i)
+			container_details.appendChild(p_details_name)
+			container_details.appendChild(p_details_category)
+			container_time.appendChild(p_time_from)
+			container_time.appendChild(p_time_to)
+			container_activity.appendChild(container_details)
+			container_activity.appendChild(container_time)
+			container_activity.appendChild(button)
+			console.log(container_activity)
+			container.appendChild(container_activity)
+		}			 
+	}
+		
+}
+
+//calcula la diferencia de horas entre dos horas en formato militar
+function diference_of_time(from, to){
+	const from_hours = from.substring(0,2)
+	const from_minutes = from.substring(3,5)
+	const to_hours = to.substring(0,2)
+	const to_minutes = to.substring(3,5)
+	const from_total_minutes = (parseInt(from_hours) * 60) + parseInt(from_minutes)
+	const to_total_minutes = (parseInt(to_hours) * 60) + parseInt(to_minutes)
+	return Math.ceil((to_total_minutes - from_total_minutes) / 60)
 }
 
 /* Determina cuál formulario se muestra entre "FIXED" y "AUTO" */
@@ -14,6 +124,17 @@ function change_form_template(template_name){
 		load_auto_form_template()
 	}
 }
+
+function round_hour(hour){
+	const minutes = parseInt(hour.substring(3,5))
+	hour = parseInt(hour.substring(0,2))
+	if(minutes > 0){
+		console.log(hour)
+		return hour + 1
+	}
+	return hour
+}
+
 
 /* Crea cada contenedor donde irán guardadas las actividades a agregar en la base de datos */
 async function load_container_activities_template(){
@@ -193,5 +314,5 @@ function create_select_elements_list(list, label_text, name, id){
 }
 
 
-export {load_container_activities_template, add_activity, load_fixed_form_template}
+export {load_container_activities_template, add_activity, load_fixed_form_template, show_activities}
 

@@ -42,7 +42,7 @@ function sort_activity(a, b){
 function is_hours_avaliable(register, from, to){
 	from = parseInt(from.substring(0,2))
 	to = round_hour(to)
-	for(let i = from; i < to + 1; i++){
+	for(let i = from; i < to; i++){
 		if(register[i - 7] == 1){
 			return false
 		}
@@ -58,15 +58,35 @@ function mark_hours(register, from, to){
 	}
 }
 
+
+function unmark_hours(register, from, to){
+	from = parseInt(from.substring(0,2))
+	to = round_hour(to)
+	for(let i = from; i < to; i++){
+		register[i - 7] = 0	
+	}
+}
+
 //crea cada una de las actividades definidas en el formulario y lo agrupa en un contenedor por dia
 function show_activities(){
 	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
+	const colors = {
+		'sports': '#f26d68',
+		'university': '#f2bd68',
+		'leasures': '#adf268',
+		'study': '#68f294',
+		'courses': '#68f2f0',
+		'friends': '#6450eb',
+		'family': '#c549eb',
+		'home': '#eb42b5',
+		'workout': '#692637',
+	}
 
 	for (let d = 0; d < days.length; d++){
 		let container = document.getElementById(`container-${days[d]}`)
-		console.log(container)
+		container.innerHTML = ''
 		
-		for(let i = 0; i < activities[days[d]][0].length;i++){
+		for(let k = 0; k < activities[days[d]][0].length;k++){
 			let container_activity = document.createElement('div')
 			let container_details = document.createElement('div')
 			let container_time = document.createElement('div')
@@ -76,7 +96,7 @@ function show_activities(){
 			let p_time_to = document.createElement('p')
 			let button = document.createElement('button')
 			let i = document.createElement('i')
-			let data = activities[days[d]][0][i]
+			let data = activities[days[d]][0][k]
 
 			container_activity.classList.add('day-activity')
 			container_details.classList.add('activity-details')
@@ -84,11 +104,17 @@ function show_activities(){
 			p_details_name.classList.add('details-name')
 			p_details_category.classList.add('details-category')
 			i.classList.add('fa-solid', 'fa-trash')
-			//TODO: OBJETIVO: CONSEGUIR INSERTAR CADA ACTIVIDAD DENTRO DE SU GRUPO.
-			p_details_name.textContent = data['name']
+
+			p_details_name.textContent = data['name'] 
 			p_time_from.textContent = data['from']
 			p_time_to.textContent = data['to']
-			p_details_category.innerHTML = `<span></span>${data['category']}` 
+			p_details_category.innerHTML = `<span style="background-color: ${colors[data['category']]}"></span>${data['category']}` 
+
+			button.addEventListener('click', (e)=>{
+				activities[days[d]][0].splice(k, 1)
+				unmark_hours(activities[days[d]][2], data['from'], data['to'])
+				button.parentNode.parentNode.removeChild(button.parentNode)
+			})
 
 			button.appendChild(i)
 			container_details.appendChild(p_details_name)
@@ -104,6 +130,7 @@ function show_activities(){
 	}
 		
 }
+
 
 //calcula la diferencia de horas entre dos horas en formato militar
 function diference_of_time(from, to){
@@ -129,7 +156,6 @@ function round_hour(hour){
 	const minutes = parseInt(hour.substring(3,5))
 	hour = parseInt(hour.substring(0,2))
 	if(minutes > 0){
-		console.log(hour)
 		return hour + 1
 	}
 	return hour
@@ -144,9 +170,11 @@ async function load_container_activities_template(){
 	for (let date of DATES) {
 		const container = document.createElement('div')
 		const h3_date = document.createElement('h3')
-		container.setAttribute('id', `container-${date.toLowerCase()}`)
+		const div_activities = document.createElement('div')
+		div_activities.setAttribute('id', `container-${date.toLowerCase()}`)
 		h3_date.textContent = date
 		container.appendChild(h3_date)
+		container.appendChild(div_activities)
 		df.appendChild(container)
 	}
 	const container_submit = document.createElement('div')

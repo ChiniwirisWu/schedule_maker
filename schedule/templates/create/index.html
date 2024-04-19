@@ -23,6 +23,8 @@
 				<!--activities fields -->
 			<form id='form-create-schedule' method='post' action='{% url "schedule:create_schedule" %}'>
 				{% csrf_token %}
+				<input type='hidden' name='username' value='{{username}}' />
+				<input type='hidden' name='password' value='{{password}}' />
 				<input name='data' type='hidden' id='inp-data' />
 				<button style='margin: auto;' id='btn-create-schedule'>Create Schedule</button>
 			</form>

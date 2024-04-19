@@ -16,6 +16,7 @@ const activities = {
 function add_activity(form){
 	const form_data = new FormData(form)
 	const data = Object.fromEntries(form_data)
+	data['weight'] = 5
 	if (data['from'] == undefined){
 		// I am in a automatic form
 
@@ -204,8 +205,8 @@ async function load_auto_form_template(){
 	let ital = document.createElement('i')
 	let label_hours = document.createElement('label')
 	let input_hours = document.createElement('input')
-	let label_importance = document.createElement('label')
-	let input_importance = document.createElement('input')
+	let label_weight = document.createElement('label')
+	let input_weight = document.createElement('input')
 
 	//set properties to html elements
 	h3_welcome.textContent = 'Create each activities for your week! (˶ᵔ ᵕ ᵔ˶)' 
@@ -218,11 +219,11 @@ async function load_auto_form_template(){
 	ital.classList.add('fa-solid','fa-plus')
 	button.setAttribute('id', 'btn-submit')
 	label_hours.textContent = 'Hours: '
-	label_importance.textContent = 'Importance: '
+	label_weight.textContent = 'weight: '
 	input_hours.setAttribute('type', 'number')
-	input_importance.setAttribute('type', 'number')
+	input_weight.setAttribute('type', 'number')
 	input_hours.setAttribute('name', 'hours')
-	input_importance.setAttribute('name', 'importance')
+	input_weight.setAttribute('name', 'weight')
 
 	button.appendChild(ital)
 	df.appendChild(h3_welcome)	
@@ -233,8 +234,8 @@ async function load_auto_form_template(){
 	df.appendChild(input_name)
 	df.appendChild(label_hours)
 	df.appendChild(input_hours)
-	df.appendChild(label_importance)
-	df.appendChild(input_importance)
+	df.appendChild(label_weight)
+	df.appendChild(input_weight)
 	df.appendChild(button)
 	form_activity.removeAttribute('id')
 	form_activity.setAttribute('id', 'form-auto')

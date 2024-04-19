@@ -1,6 +1,7 @@
+from decimal import MAX_EMAX
 from django.db import models
 from django.forms import CharField
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator
 DEFAULT_USERNAME = 'user123default'
 DEFAULT_PASSWORD = 'password123default'
 
@@ -16,12 +17,16 @@ class User(models.Model):
 
 class Activity(models.Model):
     name = models.CharField(max_length=100, default='')
-    day = models.IntegerField(default=1)
-    time = models.CharField(max_length=50, default='')
-    weight = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    day = models.CharField(default='', max_length=9)
+    from_time = models.CharField(default='', max_length=5)
+    to_time = models.CharField(default='', max_length=5)
+    category = models.CharField(default='', max_length=20)
+    weight = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(6)])
     hours = models.IntegerField(default=0) #this will be a json stringify {[10.15, 11.00], ...,  [a, b]}
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    show = models.BooleanField(default=True)
 
-
+    def __str__(self):
+        return self.name
 
 

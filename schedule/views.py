@@ -35,7 +35,18 @@ def create_user(request): #request: user, password
     return render(request, 'login/index.html', context={'msg':'user {0} created successfully'.format(username)})
 
 def create_schedule(request):
-    data:dict = json.loads(request.POST['data'])
+    data:dict = json.loads(request.POST.get('data'))
+    user = User.objects.get(username=request.POST.get('username'), password=request.POST.get('password'))
+    remove_all_activities_of_user(user)
+    for el in data:
+        for act in data[el][0]:
+            if('from' in act.keys()):
+                #fixed status
+                activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], from_time=act['from'], to_time=act['to'], show=True, category=act['category'], user=user)
+            else:
+                #auto status
+                activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], hours=act['hours'], show=True, category=act['category'], user=user)
+            activity.save()            
     return render(request, 'api.html', context={'data':data})
 
 def log_out(request):
@@ -43,3 +54,16 @@ def log_out(request):
     user = User.objects.get(pk=user_id)
     user.state = 0
     return render(request, 'login/index.html', context={'msg':'user {0} log out successfully'.format(user.username)})
+
+def remove_all_activities_of_user(user):
+    for el in Activity.objects.filter(user__lte=user):
+        el.delete()
+
+
+
+
+
+
+
+
+

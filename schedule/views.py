@@ -16,14 +16,14 @@ def view_main(request):
     try:
         user = User.objects.get(username=username, password=password)
         user.state = 1
-        activities = json.dumps(list(Activity.objects.filter(user__lte=user).values()))
+        activities = json.dumps(list(Activity.objects.filter(user=user).values()))
         return render(request, 'main/index.html', context={'user_id': user.id, 'activities':activities})
     except ObjectDoesNotExist:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
 def view_create_schedule(request):
     user = User.objects.get(pk=request.POST.get('user_id'))
-    activities = json.dumps(list(Activity.objects.filter(user__lte=user).values())) 
+    activities = json.dumps(list(Activity.objects.filter(user=user).values())) 
     return render(request, 'create/index.html', context={'user_id': user.id, 'username':user.username, 'password':user.password, 'activities':activities})
 
 #functions

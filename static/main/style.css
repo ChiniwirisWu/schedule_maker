@@ -22,6 +22,10 @@
 	font-size: 20px;
 }
 
+button:hover{
+	cursor:pointer;
+}
+
 body{
 	background-color: #000;
 	background-image: url('images/wp2.jpg');
@@ -39,7 +43,7 @@ span{
 	width: 99%;
 	height: 80%;
 	margin-top: 50px; 
-	grid-template-columns: 15% 1fr 20%;
+	grid-template-columns: 13% 1fr 15%;
 	column-gap: 5px; 
 	padding: 10px;
 }
@@ -121,7 +125,7 @@ th{
 
 .day-activity{
 	background-color: #eee;
-	width: 93%;
+	width: 90%;
 	display: flex;
 	border: 1px solid var(--dark-blue);
 	padding: 0px 10px;

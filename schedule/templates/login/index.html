@@ -10,7 +10,7 @@
 		<div id="container">
 			<div id="container-welcome">Welcome<br>Back<br>User! </div>
 			<div id="container-login">
-				<form action="{% url 'schedule:main' %}" method="POST">
+				<form action="{% url 'schedule:view_main' %}" method="POST">
 					{% csrf_token %}
 					<h3>Insert user data</h3>	
 					<label>Username:</label>

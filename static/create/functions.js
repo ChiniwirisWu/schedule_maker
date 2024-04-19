@@ -166,7 +166,11 @@ function round_hour(hour){
 async function load_container_activities_template(){
 	const DATES = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thrusday','Friday','Saturday']
 	const parent_node = document.getElementById('container')
+	const container_submit = document.createElement('div')
+	const button = document.getElementById('btn-create-schedule')
+	const form = document.getElementById('form-create-schedule')
 	const df = document.createDocumentFragment()
+
 	for (let date of DATES) {
 		const container = document.createElement('div')
 		const h3_date = document.createElement('h3')
@@ -177,16 +181,12 @@ async function load_container_activities_template(){
 		container.appendChild(div_activities)
 		df.appendChild(container)
 	}
-	const container_submit = document.createElement('div')
-	const button = document.createElement('button')
-	container_submit.setAttribute('id', 'container-submit')
-	button.textContent = 'Create New Schedule'
+
 	button.addEventListener('click', (e)=>{
-		console.log(JSON.stringify(activities))
+			document.getElementById('inp-data').value = JSON.stringify(activities)
 	})
-	container_submit.appendChild(button)
-	df.appendChild(container_submit)
-	parent_node.appendChild(df)
+
+	parent_node.insertBefore(df, form)
 }
 
 // Formulario para actividades que tengan horario automatico

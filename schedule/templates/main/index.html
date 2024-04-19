@@ -152,7 +152,7 @@
 					{% csrf_token %}
 					<button>Edit schedule</button>
 				</form>
-				<form action="{% url 'schedule:create_schedule' %}" method='POST'>
+				<form action="{% url 'schedule:view_create_schedule' %}" method='POST'>
 					{% csrf_token %}
 					<input type='hidden' value={{user_id}} name='user_id' />
 					<button>Create new schedule</button>

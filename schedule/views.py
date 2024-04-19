@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import json
 from .models import User, Activity
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -32,6 +33,10 @@ def create_user(request): #request: user, password
     new_user = User(username=username, password=password)
     new_user.save()
     return render(request, 'login/index.html', context={'msg':'user {0} created successfully'.format(username)})
+
+def create_schedule(request):
+    data:dict = json.loads(request.POST['data'])
+    return render(request, 'api.html', context={'data':data})
 
 def log_out(request):
     user_id = request.POST.get('user_id')

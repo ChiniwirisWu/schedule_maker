@@ -1,4 +1,5 @@
 const form_activity = document.querySelector('.form-activities')
+const previous_activities = JSON.parse(document.getElementById('previous-activities').value)
 let min_hour = 7
 let max_hour = 22
 let avaliable_hours = max_hour - min_hour
@@ -12,19 +13,20 @@ const activities = {
 	'saturday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 	'sunday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 }
+load_previous_activities()
 
 function add_activity(form){
 	const form_data = new FormData(form)
 	const data = Object.fromEntries(form_data)
-	data['weight'] = 5
-	if (data['from'] == undefined){
+	if (data['from_time'] == undefined){
 		// I am in a automatic form
 
 	} else{
 		// I am at fixed form
-		const hours = diference_of_time(data['from'], data['to']) 
-		if (activities[data['day']][1] - hours >= 0 && is_hours_avaliable(activities[data['day']][2], data['from'], data['to'])){
-			mark_hours(activities[data['day']][2], data['from'], data['to'])	
+		data['weight'] = 5
+		const hours = diference_of_time(data['from_time'], data['to_time']) 
+		if (activities[data['day']][1] - hours >= 0 && is_hours_avaliable(activities[data['day']][2], data['from_time'], data['to_time'])){
+			mark_hours(activities[data['day']][2], data['from_time'], data['to_time'])	
 			activities[data['day']][0].push(data)
 			activities[data['day']][1] -= hours
 			console.log(activities)
@@ -34,9 +36,22 @@ function add_activity(form){
 	}
 }
 
+
+function load_previous_activities(){
+	for (let el of previous_activities){
+		activities[el['day']][0].push(el)
+		activities[el['day']][1] -= diference_of_time(el['from_time'], el['to_time']) 
+		mark_hours(activities[el['day']][2], el['from_time'], el['to_time'])	
+	}
+	for (let [key, value] of Object.entries(activities)){
+		activities[key][0].sort(sort_activity)
+	}
+	console.log(activities)
+}
+
 function sort_activity(a, b){
 	console.log(a,b)
-	return parseInt(a.from.substring(0,2)) - parseInt(b.from.substring(0,2))
+	return parseInt(a.from_time.substring(0,2)) - parseInt(b.from_time.substring(0,2))
 }
 
 
@@ -107,13 +122,13 @@ function show_activities(){
 			i.classList.add('fa-solid', 'fa-trash')
 
 			p_details_name.textContent = data['name'] 
-			p_time_from.textContent = data['from']
-			p_time_to.textContent = data['to']
+			p_time_from.textContent = data['from_time']
+			p_time_to.textContent = data['to_time']
 			p_details_category.innerHTML = `<span style="background-color: ${colors[data['category']]}"></span>${data['category']}` 
 
 			button.addEventListener('click', (e)=>{
 				activities[days[d]][0].splice(k, 1)
-				unmark_hours(activities[days[d]][2], data['from'], data['to'])
+				unmark_hours(activities[days[d]][2], data['from_time'], data['to_time'])
 				button.parentNode.parentNode.removeChild(button.parentNode)
 			})
 
@@ -276,8 +291,8 @@ async function load_fixed_form_template(){
 	label_to.textContent = 'To: '
 	input_from.setAttribute('type', 'time')
 	input_to.setAttribute('type', 'time')
-	input_from.setAttribute('name', 'from')
-	input_to.setAttribute('name', 'to')
+	input_from.setAttribute('name', 'from_time')
+	input_to.setAttribute('name', 'to_time')
 	button.appendChild(ital)
 
 	df.appendChild(h3_welcome)	

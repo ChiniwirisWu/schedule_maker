@@ -8,9 +8,10 @@
 		<script src="https://kit.fontawesome.com/51e1fe77b6.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
+		<input type='hidden' value='{{activities}}' id='inp-data' />
 		<form action="{% url 'schedule:log_out' %}" method='POST'>
 			{% csrf_token %}
-			<input type='hidden' value='{{user_id}}' name='user_id' />
+			<input type='hidden' value={{user_id}} name='user_id' />
 			<button>Log out</button>
 		</form>
 		<div id="container">
@@ -41,110 +42,7 @@
 				</div>
 			</div>
 			<div id="container-table">
-				<table>
-					<tr>
-						<th>Weekday:</th>
-						<th>Weekday:</th>
-						<th>Weekday:</th>
-						<th>Weekday:</th>
-						<th>Weekday:</th>
-						<th>Weekday:</th>
-						<th>Weekday:</th>
-					</tr>
-					<tr>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-						<td>
-						<div id="next-activity">
-							<div id="next-activity-details">
-								<p>University</p>
-								<p>11:00pm - 12:45pm</p>
-								<p><span></span>University</p>
-							</div>
-							<div id="next-activity-buttons">
-								<button><i class="fa-solid fa-check"></i></button>
-								<button><i class="fa-solid fa-ban"></i></button>
-							</div>
-						</div>
-						</td>
-					</tr>
-				</table>
+				{% comment %}activities goes here :D{% endcomment %}
 			</div>
 			<div id="container-options">
 				<h3>Settings</h3>
@@ -159,5 +57,6 @@
 				</form>
 			</div>
 		</div>
+		<script src='{% static "main/main.js" %}' type='module'></script>
 	</body>
 </html>

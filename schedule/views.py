@@ -14,17 +14,17 @@ def view_main(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     try:
-        user = User.objects.get(username=username)
-        if(user.password == password):
-            user.state = 1
-            return render(request, 'main/index.html', context={'user_id': user.id})
-        return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
+        user = User.objects.get(username=username, password=password)
+        user.state = 1
+        activities = json.dumps(list(Activity.objects.filter(user__lte=user).values()))
+        return render(request, 'main/index.html', context={'user_id': user.id, 'activities':activities})
     except ObjectDoesNotExist:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
 def view_create_schedule(request):
     user = User.objects.get(pk=request.POST.get('user_id'))
-    return render(request, 'create/index.html', context={'user_id': user.id, 'username':user.username, 'password':user.password})
+    activities = json.dumps(list(Activity.objects.filter(user__lte=user).values())) 
+    return render(request, 'create/index.html', context={'user_id': user.id, 'username':user.username, 'password':user.password, 'activities':activities})
 
 #functions
 def create_user(request): #request: user, password
@@ -40,14 +40,14 @@ def create_schedule(request):
     remove_all_activities_of_user(user)
     for el in data:
         for act in data[el][0]:
-            if('from' in act.keys()):
+            if('from_time' in act.keys()):
                 #fixed status
-                activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], from_time=act['from'], to_time=act['to'], show=True, category=act['category'], user=user)
+                activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], from_time=act['from_time'], to_time=act['to_time'], show=True, category=act['category'], user=user)
             else:
                 #auto status
                 activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], hours=act['hours'], show=True, category=act['category'], user=user)
             activity.save()            
-    return render(request, 'api.html', context={'data':data})
+    return render(request, 'main/index.html', context={'user_id':user.id, 'username':user.username, 'password':user.password,'activities': json.dumps(list(Activity.objects.filter(user__lte=user).values()))})
 
 def log_out(request):
     user_id = request.POST.get('user_id')

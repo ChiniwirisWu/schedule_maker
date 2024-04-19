@@ -1,4 +1,5 @@
 const form_activity = document.querySelector('.form-activities')
+const previous_activities = JSON.parse('[{"id": 5, "name": "gym", "day": "monday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 6, "name": "university", "day": "monday", "from_time": "10:00", "to_time": "12:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 7, "name": "gym", "day": "tuesday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 8, "name": "gym", "day": "wednesday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 9, "name": "university", "day": "wednesday", "from_time": "10:00", "to_time": "12:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 10, "name": "gym", "day": "thrusday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 11, "name": "gym", "day": "friday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 12, "name": "university", "day": "friday", "from_time": "10:00", "to_time": "12:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 13, "name": "gym", "day": "saturday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}, {"id": 14, "name": "gym", "day": "sunday", "from_time": "08:00", "to_time": "10:00", "category": "workout", "weight": 5, "hours": 0, "user_id": 1, "show": true}]')
 let min_hour = 7
 let max_hour = 22
 let avaliable_hours = max_hour - min_hour
@@ -13,17 +14,26 @@ const activities = {
 	'sunday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 }
 
+function load_previous_activities(){
+	for (let el of previous_activities){
+		activities[el['day']][0].push(el)
+	}
+	for (let [key, value] of Object.entries(activities)){
+		activities[key][0].sort(sort_activity)
+	}
+}
+
 function add_activity(form){
 	const form_data = new FormData(form)
 	const data = Object.fromEntries(form_data)
-	if (data['from'] == undefined){
+	if (data['from_time'] == undefined){
 		// I am in a automatic form
 
 	} else{
 		// I am at fixed form
-		const hours = diference_of_time(data['from'], data['to']) 
-		if (activities[data['day']][1] - hours >= 0 && is_hours_avaliable(activities[data['day']][2], data['from'], data['to'])){
-			mark_hours(activities[data['day']][2], data['from'], data['to'])	
+		const hours = diference_of_time(data['from_time'], data['to']) 
+		if (activities[data['day']][1] - hours >= 0 && is_hours_avaliable(activities[data['day']][2], data['from_time'], data['to'])){
+			mark_hours(activities[data['day']][2], data['from_time'], data['to'])	
 			activities[data['day']][0].push(data)
 			activities[data['day']][1] -= hours
 			console.log(activities)
@@ -35,7 +45,7 @@ function add_activity(form){
 
 function sort_activity(a, b){
 	console.log(a,b)
-	return parseInt(a.from.substring(0,2)) - parseInt(b.from.substring(0,2))
+	return parseInt(a.from_time.substring(0,2)) - parseInt(b.from_time.substring(0,2))
 }
 
 
@@ -70,6 +80,7 @@ function unmark_hours(register, from, to){
 //crea cada una de las actividades definidas en el formulario y lo agrupa en un contenedor por dia
 function show_activities(){
 	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
+	load_previous_activities()
 	const colors = {
 		'sports': '#f26d68',
 		'university': '#f2bd68',
@@ -106,13 +117,13 @@ function show_activities(){
 			i.classList.add('fa-solid', 'fa-trash')
 
 			p_details_name.textContent = data['name'] 
-			p_time_from.textContent = data['from']
+			p_time_from.textContent = data['from_time']
 			p_time_to.textContent = data['to']
 			p_details_category.innerHTML = `<span style="background-color: ${colors[data['category']]}"></span>${data['category']}` 
 
 			button.addEventListener('click', (e)=>{
 				activities[days[d]][0].splice(k, 1)
-				unmark_hours(activities[days[d]][2], data['from'], data['to'])
+				unmark_hours(activities[days[d]][2], data['from_time'], data['to'])
 				button.parentNode.parentNode.removeChild(button.parentNode)
 			})
 

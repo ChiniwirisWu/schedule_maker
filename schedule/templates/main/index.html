@@ -30,16 +30,19 @@
 				</div>
 
 				<h3>Cancelled Activities</h3>
-				<div id="next-activity">
-					<div id="next-activity-details">
-						<p>University</p>
-						<p>11:00pm - 12:45pm</p>
-						<p><span></span>University</p>
+				{% for el in unshow_activities %}
+					<div id="next-activity">
+						<div id="next-activity-details">
+							<p><b>{{el.day}}</b></p>
+							<p>{{el.name}}</p>
+							<p>{{el.from_time}} - {{el.to_time}}</p>
+							<p><span></span>{{el.category}}</p>
+						</div>
+						<div id="next-activity-buttons">
+							<button class='btn-uncancel' data-day={{el.day}} data-from_time={{el.from_time}}><i class="fa-solid fa-check"></i></button>
+						</div>
 					</div>
-					<div id="next-activity-buttons">
-						<button><i class="fa-solid fa-check"></i></button>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 			<div id="container-table">
 				{% comment %}activities goes here :D{% endcomment %}

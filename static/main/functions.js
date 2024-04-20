@@ -1,6 +1,5 @@
 const container_table = document.getElementById('container-table')
 const previous_activities = JSON.parse(document.getElementById('inp-data').value)
-console.log(previous_activities)
 let min_hour = 7
 let max_hour = 22
 let avaliable_hours = max_hour - min_hour
@@ -15,9 +14,31 @@ const activities = {
 	'sunday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 }
 
+async function add_uncancel_activities_event(){
+	const buttons = document.querySelectorAll('.btn-uncancel')
+	const user_id = document.getElementById('user-id').value
+	console.log('HOLAAA')
+	console.log(buttons)
+	const token = await fetch('get_csrf_token').then(response=>response.json())
+	buttons.forEach((el, index)=>{
+		el.addEventListener('click', async(e)=>{
+			let request = await fetch('uncancel_activity', {
+				method: 'POST',
+				body: JSON.stringify({user_id, 'day': el.dataset.day, 'from_time': el.dataset.from_time}),
+				headers: {
+					'Content-type': 'application/json',
+					'X-CSRFToken': token.csrf_token
+				}
+			})
+			if (request.status == 200){
+				location.reload(true)
+			}
+		})
+	})
+}
+
 
 function sort_activity(a, b){
-	console.log(a,b)
 	return parseInt(a.from_time.substring(0,2)) - parseInt(b.from_time.substring(0,2))
 }
 
@@ -112,7 +133,7 @@ async function show_activities(){
 			button.addEventListener('click', async()=>{
 				let response = await fetch('cancel_activity', {
 					method:'POST',
-					body: JSON.stringify({user_id,'day':days[d], 'activity_index':k}),
+					body: JSON.stringify({user_id,'day':days[d], 'from_time':data['from_time']}),
 					headers: {
 						'Content-type': 'application/json',
 						'X-CSRFToken': token.csrf_token
@@ -133,7 +154,6 @@ async function show_activities(){
 			container_time.appendChild(button2)
 			//container_activity.appendChild(button)
 			//container_activity.appendChild(button2)
-			console.log(container_activity)
 			container.appendChild(container_activity)
 		}			 
 	}
@@ -141,4 +161,4 @@ async function show_activities(){
 }
 
 
-export { load_container_activities_template, show_activities }
+export { load_container_activities_template, show_activities, add_uncancel_activities_event}

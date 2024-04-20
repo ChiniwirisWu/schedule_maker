@@ -20,7 +20,8 @@ def view_main(request):
         user = User.objects.get(username=username, password=password)
         user.state = 1
         activities = json.dumps(list(Activity.objects.filter(user=user).values()))
-        return render(request, 'main/index.html', context={'user_id': user.id, 'activities':activities})
+        unshow_activities = Activity.objects.filter(user=user, show=False).values()
+        return render(request, 'main/index.html', context={'user_id': user.id, 'activities':activities, 'unshow_activities':unshow_activities})
     except ObjectDoesNotExist:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
@@ -40,9 +41,17 @@ def create_user(request): #request: user, password
 def cancel_activity(request):
     data = json.loads(request.body)
     user = User.objects.get(pk=data['user_id'])
-    activities = Activity.objects.filter(user=user, day=data['day'])
-    activity = activities[data['activity_index']]
+    activity = Activity.objects.get(user=user, day=data['day'], from_time=data['from_time'])
     activity.show = False
+    activity.save()
+    return HttpResponse(status=200)
+
+
+def uncancel_activity(request):
+    data = json.loads(request.body)
+    user = User.objects.get(pk=data['user_id'])
+    activity = Activity.objects.get(user=user, day=data['day'], from_time=data['from_time'])
+    activity.show = True
     activity.save()
     return HttpResponse(status=200)
 

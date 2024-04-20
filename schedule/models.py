@@ -25,6 +25,7 @@ class Activity(models.Model):
     hours = models.IntegerField(default=0) #this will be a json stringify {[10.15, 11.00], ...,  [a, b]}
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     show = models.BooleanField(default=True)
+    done = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

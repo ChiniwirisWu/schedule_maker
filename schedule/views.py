@@ -1,7 +1,10 @@
+from django.http import HttpResponseNotAllowed, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 import json
 from .models import User, Activity
 from django.core.exceptions import ObjectDoesNotExist
+from django.middleware import csrf
 
 # Create your views here.
 def view_login(request):
@@ -34,6 +37,15 @@ def create_user(request): #request: user, password
     new_user.save()
     return render(request, 'login/index.html', context={'msg':'user {0} created successfully'.format(username)})
 
+def cancel_activity(request):
+    data = json.loads(request.body)
+    user = User.objects.get(pk=data['user_id'])
+    activities = Activity.objects.filter(user=user, day=data['day'])
+    activity = activities[data['activity_index']]
+    activity.show = False
+    activity.save()
+    return HttpResponse(status=200)
+
 def create_schedule(request):
     data:dict = json.loads(request.POST.get('data'))
     user = User.objects.get(username=request.POST.get('username'), password=request.POST.get('password'))
@@ -59,8 +71,11 @@ def remove_all_activities_of_user(user):
     for el in Activity.objects.filter(user__lte=user):
         el.delete()
 
-
-
+def get_csrf_token(request):
+    response = {
+        'csrf_token': csrf.get_token(request)
+    }
+    return JsonResponse(response)
 
 
 

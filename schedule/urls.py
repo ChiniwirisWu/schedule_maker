@@ -13,5 +13,7 @@ urlpatterns = [
     #functions
     path('create_user', views.create_user, name='create_user'),
     path('create_schedule', views.create_schedule, name='create_schedule'),
-    path('log_out', views.log_out, name='log_out')
+    path('log_out', views.log_out, name='log_out'),
+    path('cancel_activity', views.cancel_activity, name='cancel_activity'),
+    path('get_csrf_token', views.get_csrf_token, name='get_csrf_token')
 ]

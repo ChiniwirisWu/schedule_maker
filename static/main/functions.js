@@ -48,8 +48,9 @@ async function load_container_activities_template(){
 }
 
 
-function show_activities(){
+async function show_activities(){
 	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
+	const user_id = document.getElementById('user-id').value
 	load_previous_activities()
 	const colors = {
 		'sports': '#f26d68',
@@ -63,11 +64,20 @@ function show_activities(){
 		'workout': '#692637',
 	}
 
+	let token = await fetch('get_csrf_token').then(response=>response.json())
+
 	for (let d = 0; d < days.length; d++){
 		let container = document.getElementById(`container-${days[d]}`)
 		container.innerHTML = ''
 		
 		for(let k = 0; k < activities[days[d]][0].length;k++){
+			let data = activities[days[d]][0][k]
+			
+			if(data['show'] == false){
+				continue
+			}
+
+			let inp_user_id = document.createElement('input')
 			let container_activity = document.createElement('div')
 			let container_details = document.createElement('div')
 			let container_time = document.createElement('div')
@@ -79,7 +89,6 @@ function show_activities(){
 			let button2 = document.createElement('button')
 			let i2 = document.createElement('i')
 			let i = document.createElement('i')
-			let data = activities[days[d]][0][k]
 
 			container_activity.classList.add('day-activity')
 			container_details.classList.add('activity-details')
@@ -88,28 +97,42 @@ function show_activities(){
 			p_details_category.classList.add('details-category')
 			i.classList.add('fa-solid', 'fa-trash')
 			i2.classList.add('fa-solid', 'fa-check')
+			inp_user_id.setAttribute('name', 'user_id')
+			inp_user_id.setAttribute('type', 'hidden')
+			inp_user_id.setAttribute('value', user_id)
 
 			p_details_name.textContent = data['name'] 
 			p_time_from.textContent = data['from_time']
 			p_time_to.textContent = data['to']
 			p_details_category.innerHTML = `<span style="background-color: ${colors[data['category']]}"></span>${data['category']}` 
 
-			button.addEventListener('click', (e)=>{
-				activities[days[d]][0].splice(k, 1)
-				unmark_hours(activities[days[d]][2], data['from_time'], data['to'])
-				button.parentNode.parentNode.removeChild(button.parentNode)
-			})
-
 			button.appendChild(i)
 			button2.appendChild(i2)
+
+			button.addEventListener('click', async()=>{
+				let response = await fetch('cancel_activity', {
+					method:'POST',
+					body: JSON.stringify({user_id,'day':days[d], 'activity_index':k}),
+					headers: {
+						'Content-type': 'application/json',
+						'X-CSRFToken': token.csrf_token
+					},
+				})
+				if(response.status == 200){
+					location.reload(true)
+				}
+			})
+
 			container_details.appendChild(p_details_name)
 			container_details.appendChild(p_details_category)
 			container_time.appendChild(p_time_from)
 			container_time.appendChild(p_time_to)
 			container_activity.appendChild(container_details)
 			container_activity.appendChild(container_time)
-			container_activity.appendChild(button)
-			container_activity.appendChild(button2)
+			container_time.appendChild(button)
+			container_time.appendChild(button2)
+			//container_activity.appendChild(button)
+			//container_activity.appendChild(button2)
 			console.log(container_activity)
 			container.appendChild(container_activity)
 		}			 

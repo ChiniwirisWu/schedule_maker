@@ -27,7 +27,8 @@ def view_main(request):
 
 def view_create_schedule(request):
     user = User.objects.get(pk=request.POST.get('user_id'))
-    activities = json.dumps(list(Activity.objects.filter(user=user).values())) 
+    activities = json.dumps(list(Activity.objects.filter(user=user).values()))
+    print(activities)
     return render(request, 'create/index.html', context={'user_id': user.id, 'username':user.username, 'password':user.password, 'activities':activities})
 
 #functions
@@ -61,12 +62,13 @@ def create_schedule(request):
     remove_all_activities_of_user(user)
     for el in data:
         for act in data[el][0]:
-            if('from_time' in act.keys()):
+            print(act)
+            if(act['act_type'] == 'fixed'):
                 #fixed status
-                activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], from_time=act['from_time'], to_time=act['to_time'], show=True, category=act['category'], user=user)
+                activity = Activity(name=act['name'], act_type=act['act_type'], day=act['day'], weight=act['weight'], from_time=act['from_time'], to_time=act['to_time'], show=True, category=act['category'], user=user)
             else:
                 #auto status
-                activity = Activity(name=act['name'], day=act['day'], weight=act['weight'], hours=act['hours'], show=True, category=act['category'], user=user)
+                activity = Activity(name=act['name'], act_type=act['act_type'], weight=act['weight'], hours=act['hours'], show=True, category=act['category'], user=user)
             activity.save()            
     return render(request, 'main/index.html', context={'user_id':user.id, 'username':user.username, 'password':user.password,'activities': json.dumps(list(Activity.objects.filter(user__lte=user).values()))})
 

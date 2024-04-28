@@ -26,6 +26,7 @@ class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     show = models.BooleanField(default=True)
     done = models.BooleanField(default=False)
+    act_type = models.CharField(default='', max_length=5)
 
     def __str__(self):
         return self.name

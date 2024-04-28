@@ -1,5 +1,6 @@
 const form_activity = document.querySelector('.form-activities')
 const previous_activities = JSON.parse(document.getElementById('previous-activities').value)
+console.log(previous_activities)
 let min_hour = 7
 let max_hour = 22
 let avaliable_hours = max_hour - min_hour
@@ -12,15 +13,18 @@ const activities = {
 	'friday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 	'saturday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 	'sunday': [[],avaliable_hours, Array(matrix_space).fill(0)],
+	'auto': [[]]
 }
+
 load_previous_activities()
 
 function add_activity(form){
 	const form_data = new FormData(form)
 	const data = Object.fromEntries(form_data)
-	if (data['from_time'] == undefined){
+	if (data['act_type'] == 'auto'){
 		// I am in a automatic form
-
+		activities['auto'][0].push({'name':data.name, 'act_type':data.act_type, 'category':data.category, 'hours':parseInt(data.hours), 'weight':parseInt(data.weight)})
+		show_activities()
 	} else{
 		// I am at fixed form
 		data['weight'] = 5
@@ -29,7 +33,6 @@ function add_activity(form){
 			mark_hours(activities[data['day']][2], data['from_time'], data['to_time'])	
 			activities[data['day']][0].push(data)
 			activities[data['day']][1] -= hours
-			console.log(activities)
 			activities[data['day']][0].sort(sort_activity)
 			show_activities()
 		}
@@ -39,14 +42,15 @@ function add_activity(form){
 
 function load_previous_activities(){
 	for (let el of previous_activities){
-		activities[el['day']][0].push(el)
-		activities[el['day']][1] -= diference_of_time(el['from_time'], el['to_time']) 
-		mark_hours(activities[el['day']][2], el['from_time'], el['to_time'])	
+		if(el.act_type == 'fixed'){
+			activities[el['day']][0].push(el)
+			activities[el['day']][1] -= diference_of_time(el['from_time'], el['to_time']) 
+			mark_hours(activities[el['day']][2], el['from_time'], el['to_time'])	
+		}
 	}
 	for (let [key, value] of Object.entries(activities)){
 		activities[key][0].sort(sort_activity)
 	}
-	console.log(activities)
 }
 
 function sort_activity(a, b){
@@ -140,7 +144,6 @@ function show_activities(){
 			container_activity.appendChild(container_details)
 			container_activity.appendChild(container_time)
 			container_activity.appendChild(button)
-			console.log(container_activity)
 			container.appendChild(container_activity)
 		}			 
 	}
@@ -212,7 +215,6 @@ async function load_auto_form_template(){
 
 	let list_type = ['auto','fixed'] 
 	let list_categories = ['sports','university','leasures','study','courses','friends','family','home','workout']
-	let list_days = ['monday','tuesday','wednesday','thrusday','friday','saturday','sunday']
 	let h3_welcome = document.createElement('h3')
 	let label_name = document.createElement('label')
 	let input_name = document.createElement('input')
@@ -225,9 +227,8 @@ async function load_auto_form_template(){
 
 	//set properties to html elements
 	h3_welcome.textContent = 'Create each activities for your week! (˶ᵔ ᵕ ᵔ˶)' 
-	let select_type = create_select_elements_list_type(list_type, 'Type of activity: ', 'type', 'select-type')
+	let select_type = create_select_elements_list_type(list_type, 'Type of activity: ', 'act_type', 'select-type')
 	let select_category = create_select_elements_list(list_categories, 'Category: ', 'category', 'select-category')
-	let select_day = create_select_elements_list(list_days, 'Days: ', 'day', 'select-day')
 
 	label_name.textContent = 'Name: '
 	input_name.setAttribute('name', 'name')
@@ -244,7 +245,6 @@ async function load_auto_form_template(){
 	df.appendChild(h3_welcome)	
 	df.appendChild(select_type)
 	df.appendChild(select_category)
-	df.appendChild(select_day)
 	df.appendChild(label_name)
 	df.appendChild(input_name)
 	df.appendChild(label_hours)
@@ -279,7 +279,7 @@ async function load_fixed_form_template(){
 
 	//set properties to html elements
 	h3_welcome.textContent = 'Create each activities for your week! (˶ᵔ ᵕ ᵔ˶)' 
-	let select_type = create_select_elements_list_type(list_type, 'Type of activity: ', 'type', 'select-type')
+	let select_type = create_select_elements_list_type(list_type, 'Type of activity: ', 'act_type', 'select-type')
 	let select_category = create_select_elements_list(list_categories, 'Category: ', 'category', 'select-category')
 	let select_day = create_select_elements_list(list_days, 'Days: ', 'day', 'select-day')
 
@@ -361,5 +361,5 @@ function create_select_elements_list(list, label_text, name, id){
 }
 
 
-export {load_container_activities_template, add_activity, load_fixed_form_template, show_activities}
+export {load_container_activities_template, add_activity, load_fixed_form_template, show_activities, is_hours_avaliable, mark_hours}
 

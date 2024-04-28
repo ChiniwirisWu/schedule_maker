@@ -13,12 +13,11 @@ const activities = {
 	'saturday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 	'sunday': [[],avaliable_hours, Array(matrix_space).fill(0)],
 }
+const activities_auto = []
 
 async function add_uncancel_activities_event(){
 	const buttons = document.querySelectorAll('.btn-uncancel')
 	const user_id = document.getElementById('user-id').value
-	console.log('HOLAAA')
-	console.log(buttons)
 	const token = await fetch('get_csrf_token').then(response=>response.json())
 	buttons.forEach((el, index)=>{
 		el.addEventListener('click', async(e)=>{
@@ -38,13 +37,48 @@ async function add_uncancel_activities_event(){
 }
 
 
+function round_hour(hour){
+	const minutes = parseInt(hour.substring(3,5))
+	hour = parseInt(hour.substring(0,2))
+	if(minutes > 0){
+		return hour + 1
+	}
+	return hour
+}
+
+function is_hours_avaliable(register, from, to){
+	from = parseInt(from.substring(0,2))
+	to = round_hour(to)
+	for(let i = from; i < to; i++){
+		if(register[i - 7] == 1){
+			return false
+		}
+	}
+	return true
+}
+
+function mark_hours(register, from, to){
+	from = parseInt(from.substring(0,2))
+	to = round_hour(to)
+	for(let i = from; i < to; i++){
+		register[i - 7] = 1	
+	}
+}
+
 function sort_activity(a, b){
 	return parseInt(a.from_time.substring(0,2)) - parseInt(b.from_time.substring(0,2))
 }
 
 function load_previous_activities(){
+	const days = ['monday','tuesday','wednesday','thrusday','friday','saturday','sunday']
 	for (let el of previous_activities){
-		activities[el['day']][0].push(el)
+		if(el.act_type == 'fixed'){
+			activities[el['day']][0].push(el)
+			mark_hours(activities[el['day']][2], el['from_time'], el['to_time'])
+		}
+		if(el.act_type == 'auto'){
+			activities_auto.push(el)
+		}
 	}
 	for (let [key, value] of Object.entries(activities)){
 		activities[key][0].sort(sort_activity)
@@ -69,10 +103,60 @@ async function load_container_activities_template(){
 }
 
 
+function fill_activities_to_show(activities_to_show){
+	const days = ['monday','tuesday','wednesday','thrusday','friday','saturday','sunday']
+	const auto_act = []
+	for (let el of previous_activities){
+		if(el.act_type == 'auto'){
+			auto_act.push(el)
+		}
+	}
+
+	for (let el of auto_act){
+		let setted = false
+		for (let day of days){
+
+			if(setted == true) break;
+			let counter = 0
+
+			for(let i = 0; i < activities_to_show[day][2].length; i++){
+				if(counter == el['hours']){
+					let index = i - el['hours']
+					el['from_time'] =  index + 7 > 9  ? `${index + 7}:00` : `0${index + 7}:00`
+					el['to_time'] = index + 7 + el['hours'] > 9 ? `${index + 7 + el['hours']}:00` : `0${index + 7 + el['hours']}:00` 
+					if(is_hours_avaliable(activities_to_show[day][2], el['from_time'],el['to_time'])){
+						mark_hours(activities_to_show[day][2], el['from_time'], el['to_time'])
+						el['day'] = day
+						activities_to_show[day][0].push(el)
+						activities_to_show[day][0].sort(sort_activity)
+						setted = true
+						break
+					}
+				}
+
+				if(activities_to_show[day][2][i] == 0){
+					counter += 1
+				}
+
+				if(activities_to_show[day][2][i] == 1){
+					counter = 0
+				}
+
+			}
+		}
+	}
+	console.log(activities_to_show)
+}
+
 async function show_activities(){
 	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
 	const user_id = document.getElementById('user-id').value
 	load_previous_activities()
+	const activities_to_show = {}
+	Object.assign(activities_to_show, activities)
+	console.log(previous_activities)
+	fill_activities_to_show(activities_to_show)
+	console.log(activities_to_show)
 	const colors = {
 		'sports': '#f26d68',
 		'university': '#f2bd68',
@@ -87,12 +171,12 @@ async function show_activities(){
 
 	let token = await fetch('get_csrf_token').then(response=>response.json())
 
-	for (let d = 0; d < days.length; d++){
-		let container = document.getElementById(`container-${days[d]}`)
+	for (let day of days){
+		let container = document.getElementById(`container-${day}`)
 		container.innerHTML = ''
 		
-		for(let k = 0; k < activities[days[d]][0].length;k++){
-			let data = activities[days[d]][0][k]
+		for(let k = 0; k < activities_to_show[day][0].length;k++){
+			let data = activities_to_show[day][0][k]
 			
 			if(data['show'] == false){
 				continue
@@ -124,7 +208,7 @@ async function show_activities(){
 
 			p_details_name.textContent = data['name'] 
 			p_time_from.textContent = data['from_time']
-			p_time_to.textContent = data['to']
+			p_time_to.textContent = data['to_time']
 			p_details_category.innerHTML = `<span style="background-color: ${colors[data['category']]}"></span>${data['category']}` 
 
 			button.appendChild(i)
@@ -161,4 +245,4 @@ async function show_activities(){
 }
 
 
-export { load_container_activities_template, show_activities, add_uncancel_activities_event}
+export { load_container_activities_template, show_activities, add_uncancel_activities_event, fill_activities_to_show}

@@ -24,6 +24,7 @@ function add_activity(form){
 	if (data['act_type'] == 'auto'){
 		// I am in a automatic form
 		activities['auto'][0].push({'name':data.name, 'act_type':data.act_type, 'category':data.category, 'hours':parseInt(data.hours), 'weight':parseInt(data.weight)})
+		activities['auto'][0].sort()
 		show_activities()
 	} else{
 		// I am at fixed form
@@ -46,6 +47,32 @@ function load_previous_activities(){
 			activities[el['day']][0].push(el)
 			activities[el['day']][1] -= diference_of_time(el['from_time'], el['to_time']) 
 			mark_hours(activities[el['day']][2], el['from_time'], el['to_time'])	
+		} else{
+			const days = ['monday','tuesday','wednesday','thrusday','friday','saturday','sunday']		
+			let marked = false
+			for (let day of days){
+				if (marked) break
+				let counter = 0
+				for (let i = 0; i < activities[day][2].length; i++){
+					if (marked) break
+					if(counter == el['hours']){
+						el['from_time'] = i + 7 > 9 ? `${i + 7}:00` : `0${i + 7}:00`
+						el['to_time'] = i + 7 + el['hours'] > 9 ? `${i + 7 + el['hours']}:00` : `0${i + 7 + el['hours']}:00`
+						el['day'] = day
+						activities[day][0].push(el)
+						activities[day][0].sort(sort_activity)
+						activities[day][1] -= el['hours']
+						mark_hours(activities[day][2], el['from_time'], el['to_time'])
+						marked = true
+						break
+					}
+					if(activities[day][2][i] == 0){
+						counter += 1
+					} else{
+						counter = 0
+					}
+				}
+			}
 		}
 	}
 	for (let [key, value] of Object.entries(activities)){
@@ -87,6 +114,8 @@ function unmark_hours(register, from, to){
 	}
 }
 
+
+
 //crea cada una de las actividades definidas en el formulario y lo agrupa en un contenedor por dia
 function show_activities(){
 	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
@@ -102,11 +131,11 @@ function show_activities(){
 		'workout': '#692637',
 	}
 
-	for (let d = 0; d < days.length; d++){
-		let container = document.getElementById(`container-${days[d]}`)
+	for (let day of days){
+		let container = document.getElementById(`container-${day}`)
 		container.innerHTML = ''
 		
-		for(let k = 0; k < activities[days[d]][0].length;k++){
+		for(let k = 0; k < activities[day][0].length;k++){
 			let container_activity = document.createElement('div')
 			let container_details = document.createElement('div')
 			let container_time = document.createElement('div')
@@ -116,7 +145,7 @@ function show_activities(){
 			let p_time_to = document.createElement('p')
 			let button = document.createElement('button')
 			let i = document.createElement('i')
-			let data = activities[days[d]][0][k]
+			let data = activities[day][0][k]
 
 			container_activity.classList.add('day-activity')
 			container_details.classList.add('activity-details')
@@ -131,23 +160,21 @@ function show_activities(){
 			p_details_category.innerHTML = `<span style="background-color: ${colors[data['category']]}"></span>${data['category']}` 
 
 			button.addEventListener('click', (e)=>{
-				activities[days[d]][0].splice(k, 1)
-				unmark_hours(activities[days[d]][2], data['from_time'], data['to_time'])
-				button.parentNode.parentNode.removeChild(button.parentNode)
+				//TODO: Remove elements from the automatic activities and from activities
 			})
-
-			button.appendChild(i)
 			container_details.appendChild(p_details_name)
+
 			container_details.appendChild(p_details_category)
 			container_time.appendChild(p_time_from)
 			container_time.appendChild(p_time_to)
+			button.appendChild(i)
 			container_activity.appendChild(container_details)
 			container_activity.appendChild(container_time)
 			container_activity.appendChild(button)
+
 			container.appendChild(container_activity)
-		}			 
 	}
-		
+}
 }
 
 

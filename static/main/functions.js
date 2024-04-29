@@ -129,6 +129,7 @@ function fill_activities_to_show(activities_to_show){
 						el['day'] = day
 						activities_to_show[day][0].push(el)
 						activities_to_show[day][0].sort(sort_activity)
+						activities_to_show[day][1] -= el['hours']
 						setted = true
 						break
 					}
@@ -154,9 +155,7 @@ async function show_activities(){
 	load_previous_activities()
 	const activities_to_show = {}
 	Object.assign(activities_to_show, activities)
-	console.log(previous_activities)
 	fill_activities_to_show(activities_to_show)
-	console.log(activities_to_show)
 	const colors = {
 		'sports': '#f26d68',
 		'university': '#f2bd68',

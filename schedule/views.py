@@ -1,3 +1,4 @@
+from re import A
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -25,11 +26,16 @@ def view_main(request):
     except ObjectDoesNotExist:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
+
+# [container_activity, container_details, container_time, p_details_name, p_details_category, p_time_from, p_time_to, button]
 def view_create_schedule(request):
-    user = User.objects.get(pk=request.POST.get('user_id'))
-    activities = json.dumps(list(Activity.objects.filter(user=user).values()))
+    user_id = request.POST.get('user_id')
+    this_user = User.objects.get(pk=user_id)
+    activities = Activity.objects.filter(user=this_user)
     print(activities)
-    return render(request, 'create/index.html', context={'user_id': user.id, 'username':user.username, 'password':user.password, 'activities':activities})
+    activities = sort_activities(activities)
+    print(activities)
+    return render(request, 'create/index.html', context={'user_id': this_user.id, 'username':this_user.username, 'password':this_user.password, 'activities':activities})
 
 #functions
 def create_user(request): #request: user, password
@@ -87,6 +93,92 @@ def get_csrf_token(request):
         'csrf_token': csrf.get_token(request)
     }
     return JsonResponse(response)
+
+
+def sort_activities(activities:list):
+    fixed_activities = []
+    auto_activities = []
+
+    #get all the activities
+    for el in activities:
+        if (el.act_type == 'auto' and el.show):
+            auto_activities.append(el)
+        if (el.act_type == 'fixed' and el.show):
+            fixed_activities.append(el)
+
+    acts_sorted = {
+        'sunday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'monday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'tuesday':   [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'wednesday': [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'thursday':  [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'friday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'saturday':  [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+    }
+    #fill acts_sorted, this dict is the template of activities to show
+    for el in fixed_activities:
+        if(mark_hours(acts_sorted[el.day][2], el.from_time, el.to_time)):
+            el.hours = get_hours(el.from_time, el.to_time)
+            acts_sorted[el.day][0].append(el)
+            acts_sorted[el.day][1] -= el.hours
+    #fill acts_sorted with auto activities
+    for el in auto_activities:
+        marked = False
+        for day in acts_sorted:
+            counter = 0
+            if(marked):break
+            for i in range(len(acts_sorted[day][2])):
+                if(counter == el['hours']):
+                    from_time = (i - el['hours']) + 7 
+                    to_time = i + 7 
+                    el['from_time'] = "0{}:00".format(from_time) if from_time < 10 else "{}:00".format(from_time)
+                    el['to_time'] = "0{}:00".format(to_time) if to_time < 10 else "{}:00".format(to_time)
+                    mark_hours(acts_sorted[day][2], el['from_time'], el['to_time'])
+                    acts_sorted[day][0].append(el)
+                    acts_sorted[day][1] -= el['hours']
+                    marked = True
+                    break
+                if(hour == 0):
+                    counter += 1
+                else:
+                    counter = 0
+    return acts_sorted
+
+def get_hours(from_time, to_time):
+    from_time = int(from_time[1]) if from_time[0] == 0 else int(from_time[0:2]) 
+    to_time = int(to_time[1]) if to_time[0] == 0 else int(to_time[0:2]) 
+    return to_time - from_time
+
+def mark_hours(register, from_time, to_time):
+    from_time = from_time[0:2] 
+    to_time = to_time[0:2]
+    counter = 0
+
+    from_time = int(from_time[1]) if from_time[0] == 0 else int(from_time[0:2]) 
+    to_time = int(to_time[1]) if to_time[0] == 0 else int(to_time[0:2]) 
+    
+    i = from_time - 7
+    k = to_time - 7
+
+    print(i, k)
+
+    #look if there is space avaliable
+    for hour in range(i, k, 1):
+        if(register[hour] == 0):
+            counter += 1
+        else:
+            counter = 0
+
+    #mark the hours in the register
+    if(counter == (to_time - from_time)):
+        print('si')
+        for hour in range(i, k, 1):
+            register[hour] = 1 
+            i += 1
+        return True
+    else: 
+        return False
+
 
 
 

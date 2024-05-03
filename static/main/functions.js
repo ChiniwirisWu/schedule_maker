@@ -216,7 +216,7 @@ async function show_activities(){
 			button.addEventListener('click', async()=>{
 				let response = await fetch('cancel_activity', {
 					method:'POST',
-					body: JSON.stringify({user_id,'day':days[d], 'from_time':data['from_time']}),
+					body: JSON.stringify({user_id,'day':day, 'from_time':data['from_time']}),
 					headers: {
 						'Content-type': 'application/json',
 						'X-CSRFToken': token.csrf_token

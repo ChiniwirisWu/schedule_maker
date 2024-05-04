@@ -1,6 +1,5 @@
 //crea cada una de las actividades definidas en el formulario y lo agrupa en un contenedor por dia
 const form_activity = document.getElementById('form-activities')
-console.log(form_activity)
 function show_activities(){
 	const days = ['monday','tuesday','wednesday','thrusday', 'friday', 'saturday','sunday']
 	const colors = {
@@ -88,6 +87,15 @@ async function load_auto_form_template(){
 	let input_hours = document.createElement('input')
 	let label_weight = document.createElement('label')
 	let input_weight = document.createElement('input')
+	let username_inp = document.createElement('input')
+	let password_inp = document.createElement('input')
+	username_inp.setAttribute('name', 'username')
+	username_inp.setAttribute('type', 'hidden')
+	username_inp.setAttribute('value', document.getElementById('username-inp').value)
+	password_inp.setAttribute('name', 'password')
+	password_inp.setAttribute('type', 'hidden')
+	password_inp.setAttribute('value', document.getElementById('password-inp').value)
+
 
 	//set properties to html elements
 	h3_welcome.textContent = 'Create each activities for your week! (˶ᵔ ᵕ ᵔ˶)' 
@@ -115,6 +123,8 @@ async function load_auto_form_template(){
 	df.appendChild(input_hours)
 	df.appendChild(label_weight)
 	df.appendChild(input_weight)
+	df.appendChild(username_inp)
+	df.appendChild(password_inp)
 	df.appendChild(button)
 	form_activity.removeAttribute('id')
 	form_activity.setAttribute('id', 'form-auto')
@@ -140,6 +150,14 @@ async function load_fixed_form_template(){
 	let input_from = document.createElement('input')
 	let label_to = document.createElement('label')
 	let input_to = document.createElement('input')
+	let username_inp = document.createElement('input')
+	let password_inp = document.createElement('input')
+	username_inp.setAttribute('name', 'username')
+	username_inp.setAttribute('type', 'hidden')
+	username_inp.setAttribute('value', document.getElementById('username-inp').value)
+	password_inp.setAttribute('name', 'password')
+	password_inp.setAttribute('type', 'hidden')
+	password_inp.setAttribute('value', document.getElementById('password-inp').value)
 
 	//set properties to html elements
 	h3_welcome.textContent = 'Create each activities for your week! (˶ᵔ ᵕ ᵔ˶)' 
@@ -169,6 +187,8 @@ async function load_fixed_form_template(){
 	df.appendChild(input_from)
 	df.appendChild(label_to)
 	df.appendChild(input_to)
+	df.appendChild(username_inp)
+	df.appendChild(password_inp)
 	df.appendChild(button)
 	form_activity.removeAttribute('id')
 	form_activity.setAttribute('id', 'form-fixed')

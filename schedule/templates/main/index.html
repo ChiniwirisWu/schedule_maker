@@ -8,10 +8,10 @@
 		<script src="https://kit.fontawesome.com/51e1fe77b6.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<input type='hidden' value='{{activities}}' id='inp-data' />
 		<form action="{% url 'schedule:log_out' %}" method='POST'>
 			{% csrf_token %}
-			<input type='hidden' id='user-id' value={{user_id}} name='user_id' />
+			<input type='hidden' value={{username}} name='username' />
+			<input type='hidden' value={{password}} name='password' />
 			<button>Log out</button>
 		</form>
 		<div id="container">
@@ -29,6 +29,7 @@
 					</div>
 				</div>
 
+				{% comment %}TODO: update the how activities are show {% endcomment %}
 				<h3>Cancelled Activities</h3>
 				{% for el in unshow_activities %}
 					<div id="next-activity">
@@ -55,7 +56,8 @@
 				</form>
 				<form action="{% url 'schedule:view_create_schedule' %}" method='POST'>
 					{% csrf_token %}
-					<input type='hidden' value={{user_id}} name='user_id' />
+					<input type='hidden' value={{username}} name='username' />
+					<input type='hidden' value={{password}} name='password' />
 					<button>Create new schedule</button>
 				</form>
 			</div>

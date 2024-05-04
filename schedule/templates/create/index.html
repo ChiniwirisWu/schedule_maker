@@ -11,24 +11,19 @@
 		<input type='hidden' id='previous-activities' value="{{activities}}"/>
 		<form method='post' action='{% url "schedule:view_main" %}'>
 			{% csrf_token %}
-			<input type='hidden' name='username' value='{{username}}' />
-			<input type='hidden' name='password' value='{{password}}' />
+			<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+			<input type='hidden' id='password-inp' name='password' value='{{password}}' />
 			<button>Go to main</button>
 		</form>
 		<div id='container'>
 			<div id='container-form'>
-				<form id='form-activities' action='#' method='post' />
+				<form class='form-activities' id='form-activities' action='{% url "schedule:add_activity" %}' method='post' />
+					{% csrf_token %}
 					<!--Form for activities-->
 				</form>
 			</div>
 				<!--activities fields -->
-			<form id='form-create-schedule' method='post' action='{% url "schedule:create_schedule" %}'>
-				{% csrf_token %}
-				<input type='hidden' name='username' value='{{username}}' />
-				<input type='hidden' name='password' value='{{password}}' />
-				<input name='data' type='hidden' id='inp-data' />
-				<button style='margin: auto;' id='btn-create-schedule'>Create Schedule</button>
-			</form>
+			
 		</div>
 		<script src='{% static "create/main.js" %}' type='module'></script>
 	</body>

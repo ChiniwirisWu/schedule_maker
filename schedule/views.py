@@ -15,29 +15,38 @@ def view_register(request):
     return render(request, 'register/index.html')
 
 def view_main(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    try:
-        user = User.objects.get(username=username, password=password)
-        user.state = 1
+    user = validate_user(request)
+    if(user):
         activities = json.dumps(list(Activity.objects.filter(user=user).values()))
         unshow_activities = Activity.objects.filter(user=user, show=False).values()
-        return render(request, 'main/index.html', context={'user_id': user.id, 'activities':activities, 'unshow_activities':unshow_activities})
-    except ObjectDoesNotExist:
+        return render(request, 'main/index.html', context={'username':user.username, 'password':user.password, 'activities':activities, 'unshow_activities':unshow_activities})
+    else:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
 
 # [container_activity, container_details, container_time, p_details_name, p_details_category, p_time_from, p_time_to, button]
 def view_create_schedule(request):
-    user_id = request.POST.get('user_id')
-    this_user = User.objects.get(pk=user_id)
-    activities = Activity.objects.filter(user=this_user)
-    print(activities)
-    activities = sort_activities(activities)
-    print(activities)
-    return render(request, 'create/index.html', context={'user_id': this_user.id, 'username':this_user.username, 'password':this_user.password, 'activities':activities})
+    user = validate_user(request)
+    if(user):
+        activities = Activity.objects.filter(user=user)
+        activities = sort_activities(activities)
+        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'activities':activities})
+    else:
+        return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
 #functions
+
+def validate_user(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    try:
+        user = User.objects.get(username=username, password=password)
+        user.state = 1
+        return user
+    except ObjectDoesNotExist:
+        return False
+
+
 def create_user(request): #request: user, password
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -52,6 +61,58 @@ def cancel_activity(request):
     activity.show = False
     activity.save()
     return HttpResponse(status=200)
+
+def add_activity(request):
+    print(request.body)
+    user = validate_user(request)
+    if(user):
+        if(request.POST.get('act_type') == 'fixed'):
+            new_activity = Activity(name=post.get('name'), day=post.get('day'), from_time=post.get('from_time'), to_time=post.get('to_time'), weight=5, category=post.get('category'), hours=get_hours(post.get('from_time'), post.get('to_time'), act_type='fixed'), user=user)
+            if(space_avaliable(new_activity, user)):
+                new_activity.save()
+            return HttpResponse(200)
+        else:
+            new_activity = Activity(name=post.get('name'), weight=post.get('weight'), category=post.get('category'), hours=post.get('hours'), act_type='auto', user=user)
+            new_activity.save()
+            return HttpResponse(200)
+    else:
+        return HttpResponse(400)
+
+
+def space_avaliable(activity, user):
+    activities = Activity.objects.filter(user=user) 
+    auto_activities = []
+    for el in activities:
+        if (el.act_type == 'auto' and el.show):
+            auto_activities.append(el)
+
+    acts_sorted = {
+        'sunday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'monday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'tuesday':   [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'wednesday': [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'thursday':  [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'friday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+        'saturday':  [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+    }
+    #fill acts_sorted, this dict is the template of activities to show
+    for el in fixed_activities:
+        if(mark_hours(acts_sorted[el.day][2], el.from_time, el.to_time)):
+            el.hours = get_hours(el.from_time, el.to_time)
+
+    #see if there is space avaliable
+    counter = 0
+    for i in range(len(acts_sorted[activity.day][2])):
+        if(counter == activity['hours']):
+            return True
+        if(acts_sorted[activity.day][2][i] == 0):
+            counter += 1
+        else:
+            counter = 0
+    return False
+
+
+
 
 
 def uncancel_activity(request):
@@ -79,10 +140,12 @@ def create_schedule(request):
     return render(request, 'main/index.html', context={'user_id':user.id, 'username':user.username, 'password':user.password,'activities': json.dumps(list(Activity.objects.filter(user__lte=user).values()))})
 
 def log_out(request):
-    user_id = request.POST.get('user_id')
-    user = User.objects.get(pk=user_id)
-    user.state = 0
-    return render(request, 'login/index.html', context={'msg':'user {0} log out successfully'.format(user.username)})
+    user = validate_user(requst)
+    if(user):
+        user.state = 0
+        return render(request, 'login/index.html', context={'msg':'user {0} log out successfully'.format(user.username)})
+    else:
+        pass
 
 def remove_all_activities_of_user(user):
     for el in Activity.objects.filter(user__lte=user):

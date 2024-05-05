@@ -30,7 +30,7 @@ def view_create_schedule(request):
     if(user):
         activities = Activity.objects.filter(user=user)
         activities = sort_activities(activities)
-        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'activities':activities})
+        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'days':activities.keys(), 'monday':activities['monday'][0], 'tuesday':activities['tuesday'][0], 'wednesday':activities['wednesday'][0], 'thrusday':activities['thursday'][0], 'friday':activities['friday'][0], 'saturday':activities['saturday'][0], 'sunday':activities['sunday'][0]})
     else:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
@@ -157,7 +157,15 @@ def get_csrf_token(request):
     }
     return JsonResponse(response)
 
-
+def remove_activity(request):
+    user = validate_user(request)
+    if(user):
+        act_id = request.POST.get('act_id')
+        act = Activity.objects.get(pk=act_id)
+        act.delete()
+        return view_create_schedule(request)
+    else:
+        return render(request, 'login/index.html', msg='user does not exist')
 def sort_activities(activities:list):
     fixed_activities = []
     auto_activities = []

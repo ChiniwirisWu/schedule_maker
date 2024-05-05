@@ -12,6 +12,7 @@ urlpatterns = [
     path('view_main', views.view_main, name='view_main'),
     #functions
     path('add_activity', views.add_activity, name='add_activity'),
+    path('remove_activity', views.remove_activity, name='remove_activity'),
     path('create_user', views.create_user, name='create_user'),
     path('create_schedule', views.create_schedule, name='create_schedule'),
     path('log_out', views.log_out, name='log_out'),

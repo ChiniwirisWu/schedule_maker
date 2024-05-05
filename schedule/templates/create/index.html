@@ -18,12 +18,171 @@
 		<div id='container'>
 			<div id='container-form'>
 				<form class='form-activities' id='form-activities' action='{% url "schedule:add_activity" %}' method='post' />
-					{% csrf_token %}
-					<!--Form for activities-->
+
 				</form>
 			</div>
-				<!--activities fields -->
-			
+			<!--activities fields -->
+			<div class='container-monday'>
+				<h3>monday</h3>
+				{% for act in monday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-tuesday'>
+				<h3>tuesday</h3>
+				{% for act in tuesday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-wednesday'>
+				<h3>wednesday</h3>
+				{% for act in wednesday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-thursday'>
+				<h3>thursday</h3>
+				{% for act in thursday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-friday'>
+				<h3>friday</h3>
+				{% for act in friday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-saturday'>
+				<h3>saturday</h3>
+				{% for act in saturday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-sunday'>
+				<h3>saturday</h3>
+				{% for act in saturday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='activity-details-name'>{{act.name}}</p>
+							<p class='activity-details-category'><span></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
 		</div>
 		<script src='{% static "create/main.js" %}' type='module'></script>
 	</body>

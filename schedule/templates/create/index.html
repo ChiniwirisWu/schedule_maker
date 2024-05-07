@@ -22,13 +22,37 @@
 				</form>
 			</div>
 			<!--activities fields -->
+			<div class='container-sunday'>
+				<h3>sunday</h3>
+				{% for act in sunday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:remove_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+
 			<div class='container-monday'>
 				<h3>monday</h3>
 				{% for act in monday %}
 					<div class='day-activity'>
 						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style='background-color:{{act.color}}'></span>{{act.category}}</p>
 						</div>
 						<div class='activity-time'>
 							<p>{{act.from_time}}</p>
@@ -50,8 +74,8 @@
 				{% for act in tuesday %}
 					<div class='day-activity'>
 						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
 						</div>
 						<div class='activity-time'>
 							<p>{{act.from_time}}</p>
@@ -73,8 +97,8 @@
 				{% for act in wednesday %}
 					<div class='day-activity'>
 						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
 						</div>
 						<div class='activity-time'>
 							<p>{{act.from_time}}</p>
@@ -96,8 +120,8 @@
 				{% for act in thursday %}
 					<div class='day-activity'>
 						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
 						</div>
 						<div class='activity-time'>
 							<p>{{act.from_time}}</p>
@@ -119,8 +143,8 @@
 				{% for act in friday %}
 					<div class='day-activity'>
 						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
 						</div>
 						<div class='activity-time'>
 							<p>{{act.from_time}}</p>
@@ -142,8 +166,8 @@
 				{% for act in saturday %}
 					<div class='day-activity'>
 						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
 						</div>
 						<div class='activity-time'>
 							<p>{{act.from_time}}</p>
@@ -160,28 +184,6 @@
 				{% endfor %}
 			</div>		
 
-			<div class='container-sunday'>
-				<h3>saturday</h3>
-				{% for act in saturday %}
-					<div class='day-activity'>
-						<div class='activity-details'>
-							<p class='activity-details-name'>{{act.name}}</p>
-							<p class='activity-details-category'><span></span>{{act.category}}</p>
-						</div>
-						<div class='activity-time'>
-							<p>{{act.from_time}}</p>
-							<p>{{act.to_time}}</p>
-						</div>
-						<form action="{% url 'schedule:remove_activity' %}" method='post'>
-							{% csrf_token %}
-							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
-							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
-							<input type='hidden' name='act_id' value={{act.id}}></input>
-							<button><i class="fa-solid fa-trash"></i></button>
-						</form>
-					</div>
-				{% endfor %}
-			</div>		
 
 		</div>
 		<script src='{% static "create/main.js" %}' type='module'></script>

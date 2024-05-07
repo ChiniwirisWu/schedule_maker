@@ -30,11 +30,12 @@ def view_create_schedule(request):
     if(user):
         activities = Activity.objects.filter(user=user)
         activities = sort_activities(activities)
-        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'days':activities.keys(), 'monday':activities['monday'][0], 'tuesday':activities['tuesday'][0], 'wednesday':activities['wednesday'][0], 'thrusday':activities['thursday'][0], 'friday':activities['friday'][0], 'saturday':activities['saturday'][0], 'sunday':activities['sunday'][0]})
+        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'days':activities.keys(), 'monday':activities['monday'][0], 'tuesday':activities['tuesday'][0], 'wednesday':activities['wednesday'][0], 'thrusday':activities['thursday'][0], 'friday':activities['friday'][0], 'saturday':activities['saturday'][0], 'sunday':activities['sunday'][0]}) 
     else:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
 #functions
+
 
 def validate_user(request):
     username = request.POST.get('username')
@@ -63,16 +64,16 @@ def cancel_activity(request):
     return HttpResponse(status=200)
 
 def add_activity(request):
-    print(request.body)
-    user = validate_user(request)
+    body = json.loads(request.body)
+    user = User.objects.get(username=body['username'], password=body['password'])
     if(user):
-        if(request.POST.get('act_type') == 'fixed'):
-            new_activity = Activity(name=post.get('name'), day=post.get('day'), from_time=post.get('from_time'), to_time=post.get('to_time'), weight=5, category=post.get('category'), hours=get_hours(post.get('from_time'), post.get('to_time'), act_type='fixed'), user=user)
+        if(body['act_type'] == 'fixed'):
+            new_activity = Activity(name=body['name'], day=body['day'], from_time=body['from_time'], to_time=body['to_time'], weight=5, category=body['category'], hours=get_hours(body['from_time'], body['to_time']), act_type='fixed', user=user)
             if(space_avaliable(new_activity, user)):
                 new_activity.save()
             return HttpResponse(200)
         else:
-            new_activity = Activity(name=post.get('name'), weight=post.get('weight'), category=post.get('category'), hours=post.get('hours'), act_type='auto', user=user)
+            new_activity = Activity(name=body['name'], weight=body['weight'], category=body['category'], hours=body['hours'], act_type='auto', user=user)
             new_activity.save()
             return HttpResponse(200)
     else:
@@ -82,9 +83,13 @@ def add_activity(request):
 def space_avaliable(activity, user):
     activities = Activity.objects.filter(user=user) 
     auto_activities = []
+    fixed_activities = []
     for el in activities:
         if (el.act_type == 'auto' and el.show):
             auto_activities.append(el)
+        if (el.act_type == 'fixed' and el.show):
+            fixed_activities.append(el)
+
 
     acts_sorted = {
         'sunday':    [[],16,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
@@ -103,7 +108,7 @@ def space_avaliable(activity, user):
     #see if there is space avaliable
     counter = 0
     for i in range(len(acts_sorted[activity.day][2])):
-        if(counter == activity['hours']):
+        if(counter == activity.hours):
             return True
         if(acts_sorted[activity.day][2][i] == 0):
             counter += 1
@@ -166,15 +171,29 @@ def remove_activity(request):
         return view_create_schedule(request)
     else:
         return render(request, 'login/index.html', msg='user does not exist')
+
 def sort_activities(activities:list):
     fixed_activities = []
     auto_activities = []
+    colors = {
+		'sports': '#f26d68',
+		'university': '#f2bd68',
+		'leasures': '#adf268',
+		'study': '#68f294',
+		'courses': '#68f2f0',
+		'friends': '#6450eb',
+		'family': '#c549eb',
+		'home': '#eb42b5',
+		'workout': '#692637',
+    }
 
     #get all the activities
     for el in activities:
         if (el.act_type == 'auto' and el.show):
+            el.color = colors[el.category]
             auto_activities.append(el)
         if (el.act_type == 'fixed' and el.show):
+            el.color = colors[el.category]
             fixed_activities.append(el)
 
     acts_sorted = {
@@ -199,17 +218,17 @@ def sort_activities(activities:list):
             counter = 0
             if(marked):break
             for i in range(len(acts_sorted[day][2])):
-                if(counter == el['hours']):
-                    from_time = (i - el['hours']) + 7 
+                if(counter == el.hours):
+                    from_time = (i - el.hours) + 7 
                     to_time = i + 7 
-                    el['from_time'] = "0{}:00".format(from_time) if from_time < 10 else "{}:00".format(from_time)
-                    el['to_time'] = "0{}:00".format(to_time) if to_time < 10 else "{}:00".format(to_time)
-                    mark_hours(acts_sorted[day][2], el['from_time'], el['to_time'])
+                    el.from_time = "0{}:00".format(from_time) if from_time < 10 else "{}:00".format(from_time)
+                    el.to_time = "0{}:00".format(to_time) if to_time < 10 else "{}:00".format(to_time)
+                    mark_hours(acts_sorted[day][2], el.from_time, el.to_time)
                     acts_sorted[day][0].append(el)
-                    acts_sorted[day][1] -= el['hours']
+                    acts_sorted[day][1] -= el.hours
                     marked = True
                     break
-                if(hour == 0):
+                if(acts_sorted[day][2][i] == 0):
                     counter += 1
                 else:
                     counter = 0

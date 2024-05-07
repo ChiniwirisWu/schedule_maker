@@ -16,37 +16,192 @@
 		</form>
 		<div id="container">
 			<div id="container-assistance">
-				<h3>Next activity!</h3>
-				<div id="next-activity">
-					<div id="next-activity-details">
-						<p>University</p>
-						<p>11:00pm - 12:45pm</p>
-						<p><span></span>University</p>
-					</div>
-					<div id="next-activity-buttons">
-						<button><i class="fa-solid fa-check"></i></button>
-						<button><i class="fa-solid fa-ban"></i></button>
-					</div>
-				</div>
-
 				{% comment %}TODO: update the how activities are show {% endcomment %}
 				<h3>Cancelled Activities</h3>
-				{% for el in unshow_activities %}
+				{% for act in unshow_activities %}
 					<div id="next-activity">
 						<div id="next-activity-details">
-							<p><b>{{el.day}}</b></p>
-							<p>{{el.name}}</p>
-							<p>{{el.from_time}} - {{el.to_time}}</p>
-							<p><span></span>{{el.category}}</p>
+							<p><b>{{act.day}}</b></p>
+							<p>{{act.name}}</p>
+							<p><span></span>{{act.category}}</p>
 						</div>
 						<div id="next-activity-buttons">
-							<button class='btn-uncancel' data-day={{el.day}} data-from_time={{el.from_time}}><i class="fa-solid fa-check"></i></button>
+							<form method='post' action='{% url "schedule:uncancel_activity" %}'>
+								{% csrf_token %}
+								<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+								<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+								<input type='hidden' name='act_id' value={{act.id}}></input>
+								<button><i class="fa-solid fa-check"></i></button>
+							</form>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
 			<div id="container-table">
 				{% comment %}activities goes here :D{% endcomment %}
+
+			<div class='container-sunday day-container'>
+				<h3>sunday</h3>
+				{% for act in sunday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+
+			<div class='container-monday day-container'>
+				<h3>monday</h3>
+				{% for act in monday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style='background-color:{{act.color}}'></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-tuesday day-container'>
+				<h3>tuesday</h3>
+				{% for act in tuesday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-wednesday day-container'>
+				<h3>wednesday</h3>
+				{% for act in wednesday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-thursday day-container'>
+				<h3>thursday</h3>
+				{% for act in thursday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-friday day-container'>
+				<h3>friday</h3>
+				{% for act in friday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
+			<div class='container-saturday day-container'>
+				<h3>saturday</h3>
+				{% for act in saturday %}
+					<div class='day-activity'>
+						<div class='activity-details'>
+							<p class='details-name'>{{act.name}}</p>
+							<p class='details-category'><span style="background-color: {{act.color}}"></span>{{act.category}}</p>
+						</div>
+						<div class='activity-time'>
+							<p>{{act.from_time}}</p>
+							<p>{{act.to_time}}</p>
+						</div>
+						<form action="{% url 'schedule:cancel_activity' %}" method='post'>
+							{% csrf_token %}
+							<input type='hidden' id='username-inp' name='username' value='{{username}}' />
+							<input type='hidden' id='password-inp' name='password' value='{{password}}' />
+							<input type='hidden' name='act_id' value={{act.id}}></input>
+							<button><i class="fa-solid fa-trash"></i></button>
+						</form>
+					</div>
+				{% endfor %}
+			</div>		
+
 			</div>
 			<div id="container-options">
 				<h3>Settings</h3>
@@ -62,6 +217,5 @@
 				</form>
 			</div>
 		</div>
-		<script src='{% static "main/main.js" %}' type='module'></script>
 	</body>
 </html>

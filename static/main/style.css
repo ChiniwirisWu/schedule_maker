@@ -152,6 +152,10 @@ th{
 	flex-basis: 50%;
 }
 
+.day-container h3{
+	color: #fff;
+}
+
 .details-category span{
 	padding: 2px 5px;
 	height: 2px;

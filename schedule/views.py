@@ -3,6 +3,8 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.http import HttpResponse
 from django.shortcuts import render
 import json
+
+from django.utils.translation.trans_real import ACCEPT_LANGUAGE_HEADER_MAX_LENGTH
 from .models import User, Activity
 from django.core.exceptions import ObjectDoesNotExist
 from django.middleware import csrf
@@ -17,9 +19,10 @@ def view_register(request):
 def view_main(request):
     user = validate_user(request)
     if(user):
-        activities = json.dumps(list(Activity.objects.filter(user=user).values()))
+        activities = Activity.objects.filter(user = user)
+        activities = sort_activities(activities)
         unshow_activities = Activity.objects.filter(user=user, show=False).values()
-        return render(request, 'main/index.html', context={'username':user.username, 'password':user.password, 'activities':activities, 'unshow_activities':unshow_activities})
+        return render(request, 'main/index.html', context={'username':user.username, 'password':user.password, 'unshow_activities':unshow_activities, 'monday':activities['monday'][0], 'tuesday':activities['tuesday'][0], 'wednesday':activities['wednesday'][0], 'thursday':activities['thursday'][0], 'friday':activities['friday'][0], 'saturday':activities['saturday'][0], 'sunday':activities['sunday'][0]})
     else:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
@@ -56,12 +59,10 @@ def create_user(request): #request: user, password
     return render(request, 'login/index.html', context={'msg':'user {0} created successfully'.format(username)})
 
 def cancel_activity(request):
-    data = json.loads(request.body)
-    user = User.objects.get(pk=data['user_id'])
-    activity = Activity.objects.get(user=user, day=data['day'], from_time=data['from_time'])
+    activity = Activity.objects.get(pk=request.POST.get('act_id'))
     activity.show = False
     activity.save()
-    return HttpResponse(status=200)
+    return view_main(request)
 
 def add_activity(request):
     body = json.loads(request.body)
@@ -121,12 +122,12 @@ def space_avaliable(activity, user):
 
 
 def uncancel_activity(request):
-    data = json.loads(request.body)
-    user = User.objects.get(pk=data['user_id'])
-    activity = Activity.objects.get(user=user, day=data['day'], from_time=data['from_time'])
+    activity = Activity.objects.get(pk=request.POST.get('act_id'))
     activity.show = True
     activity.save()
-    return HttpResponse(status=200)
+    return view_main(request)
+
+
 
 def create_schedule(request):
     data:dict = json.loads(request.POST.get('data'))
@@ -145,7 +146,7 @@ def create_schedule(request):
     return render(request, 'main/index.html', context={'user_id':user.id, 'username':user.username, 'password':user.password,'activities': json.dumps(list(Activity.objects.filter(user__lte=user).values()))})
 
 def log_out(request):
-    user = validate_user(requst)
+    user = validate_user(request)
     if(user):
         user.state = 0
         return render(request, 'login/index.html', context={'msg':'user {0} log out successfully'.format(user.username)})

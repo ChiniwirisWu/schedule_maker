@@ -70,7 +70,7 @@ async function load_fixed_form_template(){
 
 	let list_type = ['fixed','auto']
 	let list_categories = ['sports','university','leasures','study','courses','friends','family','home','workout']
-	let list_days = ['monday','tuesday','wednesday','thrusday','friday','saturday','sunday']
+	let list_days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 	let h3_welcome = document.createElement('h3')
 	let label_name = document.createElement('label')
 	let input_name = document.createElement('input')

@@ -33,7 +33,7 @@ def view_create_schedule(request):
     if(user):
         activities = Activity.objects.filter(user=user)
         activities = sort_activities(activities)
-        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'days':activities.keys(), 'monday':activities['monday'][0], 'tuesday':activities['tuesday'][0], 'wednesday':activities['wednesday'][0], 'thrusday':activities['thursday'][0], 'friday':activities['friday'][0], 'saturday':activities['saturday'][0], 'sunday':activities['sunday'][0]}) 
+        return render(request, 'create/index.html', context={'username':user.username, 'password':user.password, 'days':activities.keys(), 'monday':activities['monday'][0], 'tuesday':activities['tuesday'][0], 'wednesday':activities['wednesday'][0], 'thursday':activities['thursday'][0], 'friday':activities['friday'][0], 'saturday':activities['saturday'][0], 'sunday':activities['sunday'][0]})
     else:
         return render(request, 'login/index.html', context={'msg':'Username or password invalid'})
 
@@ -135,7 +135,6 @@ def create_schedule(request):
     remove_all_activities_of_user(user)
     for el in data:
         for act in data[el][0]:
-            print(act)
             if(act['act_type'] == 'fixed'):
                 #fixed status
                 activity = Activity(name=act['name'], act_type=act['act_type'], day=act['day'], weight=act['weight'], from_time=act['from_time'], to_time=act['to_time'], show=True, category=act['category'], user=user)
@@ -235,8 +234,7 @@ def sort_activities(activities:list):
                     counter = 0
     #now is time to sort this shit
     for day in acts_sorted:
-        print(acts_sorted[day][0].sort(key=get_hour))
-        # acts_sorted[day][0].sort(key=get_hour)
+        acts_sorted[day][0].sort(key=get_hour)
     return acts_sorted
 
 def get_hour(el:dict):

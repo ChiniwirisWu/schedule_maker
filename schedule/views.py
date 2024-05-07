@@ -188,7 +188,7 @@ def sort_activities(activities:list):
 		'workout': '#692637',
     }
 
-    #get all the activities
+    #get all the activities and select them
     for el in activities:
         if (el.act_type == 'auto' and el.show):
             el.color = colors[el.category]
@@ -233,7 +233,14 @@ def sort_activities(activities:list):
                     counter += 1
                 else:
                     counter = 0
+    #now is time to sort this shit
+    for day in acts_sorted:
+        print(acts_sorted[day][0].sort(key=get_hour))
+        # acts_sorted[day][0].sort(key=get_hour)
     return acts_sorted
+
+def get_hour(el:dict):
+    return int(el.from_time[0:2])
 
 def get_hours(from_time, to_time):
     from_time = int(from_time[1]) if from_time[0] == 0 else int(from_time[0:2]) 
